@@ -21,6 +21,7 @@ yarn-error.log*
 
 # local working files (sources/derived copies live under public/)
 /assets
+/brand
 /frames
 /shots*
 /hero.mp4

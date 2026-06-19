@@ -1,20 +1,44 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
-  background: #06180C;
-  color: #FCEDD8;
+  background: #F6EEDC; /* brand cream */
+  color: #3E4B43;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
 html { scroll-behavior: smooth; }
 
-/* Features: 3-up auto-fill grid that collapses to a single column on mobile. */
-.vf-features-grid {
+/* Features: 3-up auto-fill grid, single column on mobile */
+.vf-grid-3 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.75rem 1.5rem;
 }
 
+/* Gallery: 3 flavor tiles, single column on mobile */
+.vf-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
 @media (max-width: 768px) {
-  .vf-features-grid { grid-template-columns: 1fr; }
+  .vf-grid-3 { grid-template-columns: 1fr; }
+  .vf-gallery { grid-template-columns: 1fr; }
+}
+
+/* Reduced motion: kill CSS transitions/animations and smooth-scroll.
+   (Framer Motion JS animations are handled separately via MotionConfig.) */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

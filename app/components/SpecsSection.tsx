@@ -1,8 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { colors, fonts, labelStyle } from "./tokens";
-import { revealContainer, revealItem, revealViewport } from "./motion";
+import { colors, fonts, labelOnCream } from "./tokens";
+import { revealContainer, revealItem, revealRow, revealViewport } from "./motion";
 
 const specs: [string, string][] = [
   ["Flavors", "Watermelon Blast · Pineapple Paradise · Mango Madness"],
@@ -22,7 +22,7 @@ export default function SpecsSection() {
     <section
       id="specs"
       style={{
-        background: colors.bg,
+        background: colors.cream,
         padding: "clamp(4rem, 10vw, 8rem) clamp(1.5rem, 6vw, 5rem)",
       }}
     >
@@ -33,7 +33,7 @@ export default function SpecsSection() {
         variants={revealContainer}
         style={{ maxWidth: 820, margin: "0 auto" }}
       >
-        <motion.p variants={revealItem} style={labelStyle}>
+        <motion.p variants={revealItem} style={labelOnCream}>
           The Details
         </motion.p>
         <motion.h2
@@ -43,18 +43,18 @@ export default function SpecsSection() {
             fontWeight: 400,
             fontSize: "clamp(2rem, 4vw, 3.5rem)",
             lineHeight: 1.05,
-            color: colors.textPrimary,
+            color: colors.ink,
             margin: "1rem 0 2.6rem",
           }}
         >
-          Simple, by design.
+          Built for real days.
         </motion.h2>
 
         <div>
           {specs.map(([label, value]) => (
             <motion.div
               key={label}
-              variants={revealItem}
+              variants={revealRow}
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -62,16 +62,17 @@ export default function SpecsSection() {
                 gap: "1.5rem",
                 flexWrap: "wrap",
                 padding: "1rem 0",
-                borderBottom: `1px solid ${colors.borderFaint}`,
+                borderBottom: `1px solid ${colors.border}`,
               }}
             >
               <span
                 style={{
                   fontFamily: fonts.body,
-                  fontWeight: 500,
-                  fontSize: "0.95rem",
-                  letterSpacing: "0.02em",
-                  color: colors.accent,
+                  fontWeight: 700,
+                  fontSize: "0.72rem",
+                  letterSpacing: "0.16em",
+                  textTransform: "uppercase",
+                  color: colors.pinkInk,
                 }}
               >
                 {label}
@@ -79,9 +80,9 @@ export default function SpecsSection() {
               <span
                 style={{
                   fontFamily: fonts.body,
-                  fontWeight: 300,
+                  fontWeight: 400,
                   fontSize: "0.98rem",
-                  color: colors.textBody,
+                  color: colors.body,
                   textAlign: "right",
                 }}
               >
