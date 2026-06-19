@@ -8,10 +8,10 @@ export type ScrollAnchorHandle = {
   update: (progress: number, frame: number, frameCount: number) => void;
 };
 
-// Pinned hero HUD: scroll progress bar, "scroll to explore" prompt that fades
-// as you advance, drifting accent particles, and a live frame counter.
-// Driven imperatively by ScrollHero's rAF loop — no extra scroll listener,
-// no per-frame React re-render.
+// Pinned hero HUD on the cream stage: scroll progress bar, "scroll to explore"
+// prompt that fades as you advance, drifting accent particles, and a live frame
+// counter. Driven imperatively by ScrollHero's rAF loop — no extra scroll
+// listener, no per-frame React re-render.
 const ScrollAnchor = forwardRef<ScrollAnchorHandle>(function ScrollAnchor(
   _props,
   ref,
@@ -56,7 +56,7 @@ const ScrollAnchor = forwardRef<ScrollAnchorHandle>(function ScrollAnchor(
           left: 0,
           right: 0,
           height: 3,
-          background: "rgba(252,237,216,0.14)",
+          background: "rgba(26,77,46,0.14)",
         }}
       >
         <div
@@ -66,7 +66,7 @@ const ScrollAnchor = forwardRef<ScrollAnchorHandle>(function ScrollAnchor(
             background: colors.pink,
             transform: "scaleX(0)",
             transformOrigin: "left center",
-            boxShadow: "0 0 12px rgba(249,44,110,0.75)",
+            boxShadow: "0 0 12px rgba(249,44,110,0.55)",
           }}
         />
       </div>
@@ -75,7 +75,7 @@ const ScrollAnchor = forwardRef<ScrollAnchorHandle>(function ScrollAnchor(
       {particles.map((p, i) => (
         <motion.span
           key={i}
-          animate={{ y: [0, -p.dy, 0], opacity: [0.45, 1, 0.45] }}
+          animate={{ y: [0, -p.dy, 0], opacity: [0.35, 0.8, 0.35] }}
           transition={{ duration: p.dur, repeat: Infinity, ease: "easeInOut" }}
           style={{
             position: "absolute",
@@ -85,7 +85,6 @@ const ScrollAnchor = forwardRef<ScrollAnchorHandle>(function ScrollAnchor(
             height: p.size,
             borderRadius: "50%",
             background: colors.pink,
-            filter: "blur(0.5px)",
           }}
         />
       ))}
@@ -98,11 +97,11 @@ const ScrollAnchor = forwardRef<ScrollAnchorHandle>(function ScrollAnchor(
           top: 16,
           right: 18,
           fontFamily: fonts.body,
-          fontWeight: 500,
+          fontWeight: 600,
           fontSize: "0.62rem",
           letterSpacing: "0.18em",
           textTransform: "uppercase",
-          color: "rgba(252,237,216,0.6)",
+          color: "rgba(26,77,46,0.5)",
         }}
       >
         Frame 001 / 193
@@ -126,11 +125,11 @@ const ScrollAnchor = forwardRef<ScrollAnchorHandle>(function ScrollAnchor(
         <span
           style={{
             fontFamily: fonts.body,
-            fontWeight: 600,
+            fontWeight: 700,
             fontSize: "0.6rem",
             letterSpacing: "0.3em",
             textTransform: "uppercase",
-            color: colors.creamBody,
+            color: colors.green,
           }}
         >
           Scroll to Explore

@@ -113,16 +113,12 @@ export default function AboutSection() {
             <span
               style={{
                 fontFamily: fonts.body,
-                fontWeight: 600,
-                fontSize: "0.95rem",
-                color: colors.green,
-                background: "rgba(26,77,46,0.08)",
-                border: `1px solid ${colors.border}`,
-                borderRadius: 999,
-                padding: "0.5rem 1.1rem",
+                fontWeight: 400,
+                fontSize: "0.98rem",
+                color: colors.body,
               }}
             >
-              📍 First pop-up: July 11 · Larchmont Village
+              Catch them blending fresh across LA —
             </span>
             <motion.a
               href="https://instagram.com/vidafrescala"

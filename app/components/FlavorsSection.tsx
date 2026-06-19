@@ -11,7 +11,7 @@ const flavors = [
     note: "Crisp, juicy, summer-red.",
     blurb:
       "Ripe watermelon blended with ice into the most refreshing red in LA. Nothing else needed.",
-    img: "/brand/flavors/watermelon.png",
+    img: "/brand/flavors/watermelon_cut.png",
     accent: colors.watermelon,
   },
   {
@@ -19,7 +19,7 @@ const flavors = [
     note: "Lush, sweet, golden.",
     blurb:
       "Sweet, ripe mango blended smooth and poured over ice — like sunshine in a cup.",
-    img: "/brand/flavors/mango.png",
+    img: "/brand/flavors/mango_cut.png",
     accent: colors.mango,
   },
   {
@@ -27,26 +27,28 @@ const flavors = [
     note: "Bright, tangy, tropical.",
     blurb:
       "Tangy-sweet pineapple with a clean tropical finish. The taste of a day off.",
-    img: "/brand/flavors/pineapple.png",
+    img: "/brand/flavors/pineapple_cut.png",
     accent: colors.pineapple,
   },
 ];
 
 export default function FlavorsSection() {
-  const imgRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const drinkRefs = useRef<(HTMLImageElement | null)[]>([]);
 
-  // rAF parallax — each flavor's ingredients drift as it scrolls through view.
+  // Scroll-driven float + scale: each drink peaks as its panel centers. rAF only.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let raf = 0;
     const tick = () => {
       const vh = window.innerHeight;
-      imgRefs.current.forEach((el) => {
+      drinkRefs.current.forEach((el) => {
         if (!el) return;
         const r = el.getBoundingClientRect();
         const center = r.top + r.height / 2;
-        const p = (vh / 2 - center) / vh;
-        el.style.transform = `translateY(${(p * 36).toFixed(1)}px)`;
+        const p = Math.max(-1, Math.min(1, (center - vh / 2) / vh));
+        const scale = (1.07 - Math.abs(p) * 0.14).toFixed(3);
+        const ty = (p * -54).toFixed(1);
+        el.style.transform = `translateY(${ty}px) scale(${scale})`;
       });
       raf = requestAnimationFrame(tick);
     };
@@ -59,7 +61,7 @@ export default function FlavorsSection() {
       id="flavors"
       style={{
         background: colors.cream,
-        padding: "clamp(4.5rem, 10vw, 8.5rem) clamp(1.5rem, 6vw, 5rem)",
+        padding: "clamp(4.5rem, 10vw, 8rem) clamp(1.5rem, 6vw, 5rem) 0",
       }}
     >
       <motion.div
@@ -67,9 +69,9 @@ export default function FlavorsSection() {
         whileInView="visible"
         viewport={revealViewport}
         variants={revealContainer}
-        style={{ maxWidth: 1150, margin: "0 auto 3.4rem" }}
+        style={{ maxWidth: 760, margin: "0 auto", textAlign: "center" }}
       >
-        <motion.p variants={revealItem} style={labelOnCream}>
+        <motion.p variants={revealItem} style={{ ...labelOnCream, display: "block" }}>
           Taste the Colors
         </motion.p>
         <motion.h2
@@ -93,7 +95,6 @@ export default function FlavorsSection() {
             fontSize: "clamp(1rem, 1.5vw, 1.15rem)",
             lineHeight: 1.6,
             color: colors.body,
-            maxWidth: 560,
           }}
         >
           Watch each flavor come apart into the real fruit it&apos;s made from.
@@ -101,96 +102,97 @@ export default function FlavorsSection() {
         </motion.p>
       </motion.div>
 
-      <div
-        style={{
-          maxWidth: 1150,
-          margin: "0 auto",
-          display: "flex",
-          flexDirection: "column",
-          gap: "clamp(3rem, 7vw, 6rem)",
-        }}
-      >
-        {flavors.map((f, i) => (
+      {flavors.map((f, i) => (
+        <div
+          key={f.name}
+          style={{
+            minHeight: "clamp(640px, 94vh, 1040px)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+          }}
+        >
           <motion.div
-            key={f.name}
-            className="vf-flavor"
             initial="hidden"
             whileInView="visible"
-            viewport={revealViewport}
+            viewport={{ once: true, margin: "-120px" }}
             variants={revealContainer}
+            style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
           >
             <motion.div
               variants={revealItem}
               style={{
-                borderRadius: 20,
-                overflow: "hidden",
-                background: colors.void,
-                boxShadow: "0 22px 54px rgba(26,77,46,0.20)",
+                width: 56,
+                height: 4,
+                borderRadius: 2,
+                background: f.accent,
+                marginBottom: "1rem",
+              }}
+            />
+            <motion.h3
+              variants={revealItem}
+              style={{
+                fontFamily: fonts.display,
+                fontWeight: 400,
+                fontSize: "clamp(2.2rem, 6vw, 5rem)",
+                lineHeight: 1,
+                color: colors.ink,
               }}
             >
-              <div
-                ref={(el) => {
-                  imgRefs.current[i] = el;
-                }}
-                style={{ willChange: "transform" }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={f.img}
-                  alt={`${f.name} drink deconstructed into its raw ingredients`}
-                  style={{ width: "100%", display: "block" }}
-                />
-              </div>
-            </motion.div>
-
-            <motion.div variants={revealItem} className="vf-flavor-text">
-              <div
-                style={{
-                  width: 56,
-                  height: 4,
-                  borderRadius: 2,
-                  background: f.accent,
-                  marginBottom: "1.1rem",
-                }}
-              />
-              <h3
-                style={{
-                  fontFamily: fonts.display,
-                  fontWeight: 400,
-                  fontSize: "clamp(1.8rem, 3.6vw, 3rem)",
-                  lineHeight: 1.02,
-                  color: colors.ink,
-                }}
-              >
-                {f.name}
-              </h3>
-              <p
-                style={{
-                  fontFamily: fonts.script,
-                  fontWeight: 600,
-                  fontSize: "clamp(1.3rem, 2.2vw, 1.7rem)",
-                  color: colors.pinkInk,
-                  margin: "0.2rem 0 0.9rem",
-                }}
-              >
-                {f.note}
-              </p>
-              <p
-                style={{
-                  fontFamily: fonts.body,
-                  fontWeight: 300,
-                  fontSize: "clamp(1rem, 1.4vw, 1.1rem)",
-                  lineHeight: 1.6,
-                  color: colors.body,
-                  maxWidth: 420,
-                }}
-              >
-                {f.blurb}
-              </p>
-            </motion.div>
+              {f.name}
+            </motion.h3>
+            <motion.p
+              variants={revealItem}
+              style={{
+                fontFamily: fonts.script,
+                fontWeight: 600,
+                fontSize: "clamp(1.4rem, 2.6vw, 2rem)",
+                color: colors.pinkInk,
+                margin: "0.3rem 0 1.2rem",
+              }}
+            >
+              {f.note}
+            </motion.p>
           </motion.div>
-        ))}
-      </div>
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            ref={(el) => {
+              drinkRefs.current[i] = el;
+            }}
+            src={f.img}
+            alt={`${f.name} drink deconstructed into its raw ingredients`}
+            style={{
+              height: "clamp(320px, 58vh, 720px)",
+              width: "auto",
+              maxWidth: "90vw",
+              objectFit: "contain",
+              willChange: "transform",
+              filter: "drop-shadow(0 34px 54px rgba(26,77,46,0.22))",
+            }}
+          />
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            style={{
+              fontFamily: fonts.body,
+              fontWeight: 300,
+              fontSize: "clamp(1rem, 1.4vw, 1.1rem)",
+              lineHeight: 1.6,
+              color: colors.body,
+              maxWidth: 440,
+              marginTop: "1.6rem",
+            }}
+          >
+            {f.blurb}
+          </motion.p>
+        </div>
+      ))}
     </section>
   );
 }

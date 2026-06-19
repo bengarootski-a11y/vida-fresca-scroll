@@ -90,8 +90,8 @@ export default function ClosingCTA() {
             maxWidth: 480,
           }}
         >
-          Real fruit, blended cold, served with LA sunshine. Our first pop-up
-          lands in Larchmont Village — follow along to catch the next one.
+          Real fruit, blended cold, served with LA sunshine. Our first pop-up is
+          July 11 in Larchmont Village — follow along to catch it.
         </motion.p>
 
         <motion.a

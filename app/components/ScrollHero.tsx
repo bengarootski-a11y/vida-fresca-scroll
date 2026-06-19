@@ -2,11 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { colors, fonts, labelOnDark } from "./tokens";
+import { colors, fonts, labelOnCream } from "./tokens";
 import { EASE } from "./motion";
 import ScrollAnchor, { type ScrollAnchorHandle } from "./ScrollAnchor";
 
-// Frames extracted from hero.mp4 (fps 24). Updated after frame extraction.
+// Frames extracted from hero.mp4 (fps 24), background removed onto cream.
 const FRAME_COUNT = 193;
 const framePath = (i: number) =>
   `/frames/frame_${String(i + 1).padStart(4, "0")}.jpg`;
@@ -30,7 +30,7 @@ export default function ScrollHero() {
     const draw = (idx: number) => {
       const cw = canvas.clientWidth;
       const ch = canvas.clientHeight;
-      ctx.fillStyle = colors.void;
+      ctx.fillStyle = colors.cream;
       ctx.fillRect(0, 0, cw, ch);
       const img = images[idx];
       if (!img || !img.complete || img.naturalWidth === 0) return;
@@ -123,7 +123,7 @@ export default function ScrollHero() {
   return (
     <section
       ref={containerRef}
-      style={{ height: "400vh", position: "relative", background: colors.void }}
+      style={{ height: "400vh", position: "relative", background: colors.cream }}
     >
       <div
         style={{
@@ -132,7 +132,7 @@ export default function ScrollHero() {
           width: "100vw",
           height: "100vh",
           overflow: "hidden",
-          background: colors.void,
+          background: colors.cream,
         }}
       >
         <canvas
@@ -149,7 +149,7 @@ export default function ScrollHero() {
             justifyContent: "flex-end",
             pointerEvents: "none",
             background:
-              "linear-gradient(to top, rgba(7,28,17,0.92) 0%, rgba(7,28,17,0.35) 45%, transparent 100%)",
+              "linear-gradient(to top, rgba(246,238,220,0.92) 0%, rgba(246,238,220,0.4) 42%, transparent 100%)",
           }}
         >
           <motion.div
@@ -165,7 +165,7 @@ export default function ScrollHero() {
               maxWidth: 840,
             }}
           >
-            <motion.span variants={fadeUp} style={labelOnDark}>
+            <motion.span variants={fadeUp} style={labelOnCream}>
               Fresh Fruit Drinks · Los Angeles
             </motion.span>
             <motion.h1
@@ -175,7 +175,7 @@ export default function ScrollHero() {
                 fontWeight: 400,
                 fontSize: "clamp(2.6rem,7vw,6rem)",
                 lineHeight: 0.98,
-                color: colors.creamText,
+                color: colors.ink,
                 transformOrigin: "left center",
               }}
             >
@@ -187,7 +187,7 @@ export default function ScrollHero() {
                 fontFamily: fonts.script,
                 fontWeight: 600,
                 fontSize: "clamp(1.4rem,3vw,2.2rem)",
-                color: colors.creamBody,
+                color: colors.green,
                 lineHeight: 1,
               }}
             >
@@ -195,11 +195,11 @@ export default function ScrollHero() {
             </motion.p>
             <motion.a
               variants={fadeUp}
-              href="#features"
+              href="#flavors"
               whileHover={{
                 scale: 1.05,
                 backgroundColor: colors.pinkHover,
-                boxShadow: "0 0 34px rgba(249,44,110,0.55)",
+                boxShadow: "0 0 34px rgba(249,44,110,0.5)",
               }}
               whileTap={{ scale: 0.97 }}
               transition={{ duration: 0.3, ease: EASE }}
@@ -208,7 +208,7 @@ export default function ScrollHero() {
                 alignSelf: "flex-start",
                 marginTop: "0.5rem",
                 background: colors.pink,
-                color: colors.creamText,
+                color: colors.cream,
                 fontFamily: fonts.body,
                 fontWeight: 600,
                 fontSize: "0.72rem",
