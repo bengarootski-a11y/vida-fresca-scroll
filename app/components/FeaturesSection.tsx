@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { colors, fonts, labelOnCream } from "./tokens";
-import { revealContainer, revealViewport, EASE } from "./motion";
+import { revealContainer, revealItem, revealViewport, EASE } from "./motion";
 
 const iconProps = {
   width: 30,
@@ -79,13 +79,15 @@ const features = [
   },
 ];
 
+// Cards spin/flip into place on scroll, then lift on hover.
 const cardVariants = {
-  hidden: { opacity: 0, y: 48, filter: "blur(12px)" },
+  hidden: { opacity: 0, rotateY: -78, y: 26, transformPerspective: 1000 },
   visible: {
     opacity: 1,
+    rotateY: 0,
     y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.6, ease: EASE },
+    transformPerspective: 1000,
+    transition: { duration: 0.7, ease: EASE },
   },
   hover: {
     y: -6,
@@ -121,11 +123,11 @@ export default function FeaturesSection() {
         variants={revealContainer}
         style={{ maxWidth: 1200, margin: "0 auto" }}
       >
-        <motion.p variants={cardVariants} style={labelOnCream}>
+        <motion.p variants={revealItem} style={labelOnCream}>
           Why Vida Fresca
         </motion.p>
         <motion.h2
-          variants={cardVariants}
+          variants={revealItem}
           style={{
             fontFamily: fonts.display,
             fontWeight: 400,

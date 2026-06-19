@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { colors, fonts, labelOnCream } from "./tokens";
-import { revealContainer, revealItem, revealViewport } from "./motion";
+import { revealContainer, revealItem, flipItem, revealViewport } from "./motion";
 
 const stats = [
   { value: "$6", label: "per cup" },
-  { value: "16 oz", label: "every pour" },
+  { value: "Iced", label: "over real ice" },
   { value: "3", label: "signature flavors" },
   { value: "100%", label: "real fruit" },
   { value: "0", label: "artificial anything" },
@@ -49,7 +49,7 @@ export default function SpecsSection() {
           {stats.map((s) => (
             <motion.div
               key={s.label}
-              variants={revealItem}
+              variants={flipItem}
               whileHover={{ y: -5 }}
               transition={{ duration: 0.25 }}
               style={{
@@ -125,7 +125,7 @@ export default function SpecsSection() {
               color: colors.pinkInk,
             }}
           >
-            First pop-up · July 11 · Larchmont Village
+            The first pour drops July 11 — Larchmont Village, LA
           </span>
         </motion.div>
       </motion.div>

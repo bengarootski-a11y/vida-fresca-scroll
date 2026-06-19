@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { colors, fonts, labelOnDark } from "./tokens";
-import { revealContainer, revealItem, revealViewport, EASE } from "./motion";
+import { revealContainer, revealItem, flipItem, revealViewport, EASE } from "./motion";
 
 export default function ClosingCTA() {
   return (
@@ -44,7 +44,7 @@ export default function ClosingCTA() {
         }}
       >
         <motion.p variants={revealItem} style={labelOnDark}>
-          Come By.
+          Summer starts here
         </motion.p>
 
         <motion.h2
@@ -80,6 +80,58 @@ export default function ClosingCTA() {
           </span>
         </motion.h2>
 
+        {/* The pop-up moment — a date that spins into place */}
+        <motion.div
+          variants={flipItem}
+          style={{
+            marginTop: "0.6rem",
+            border: `1px solid ${colors.borderOnDark}`,
+            borderRadius: 22,
+            padding: "clamp(1.4rem, 3vw, 2.2rem) clamp(1.8rem, 4vw, 3rem)",
+            background:
+              "linear-gradient(180deg, rgba(249,44,110,0.10), rgba(249,44,110,0.02))",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "0.35rem",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: fonts.body,
+              fontWeight: 700,
+              fontSize: "0.66rem",
+              letterSpacing: "0.26em",
+              textTransform: "uppercase",
+              color: colors.pink,
+            }}
+          >
+            Our first-ever pop-up
+          </span>
+          <span
+            style={{
+              fontFamily: fonts.display,
+              fontWeight: 400,
+              fontSize: "clamp(2.6rem, 7vw, 5rem)",
+              lineHeight: 0.95,
+              color: colors.creamText,
+            }}
+          >
+            July 11
+          </span>
+          <span
+            style={{
+              fontFamily: fonts.body,
+              fontWeight: 600,
+              fontSize: "clamp(0.85rem, 1.4vw, 1rem)",
+              letterSpacing: "0.04em",
+              color: colors.creamBody,
+            }}
+          >
+            Larchmont Village · Los Angeles
+          </span>
+        </motion.div>
+
         <motion.p
           variants={revealItem}
           style={{
@@ -91,8 +143,8 @@ export default function ClosingCTA() {
             maxWidth: 480,
           }}
         >
-          Real fruit, blended cold, served with LA sunshine. Our first pop-up is
-          July 11 in Larchmont Village — follow along to catch it.
+          Real fruit, real ice, real LA sunshine. Roll up for the very first
+          Vida Fresca pour — and bring the whole crew.
         </motion.p>
 
         <motion.a
@@ -123,7 +175,7 @@ export default function ClosingCTA() {
             textDecoration: "none",
           }}
         >
-          Follow on Instagram
+          Follow @vidafrescala
         </motion.a>
       </motion.div>
     </section>

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { colors, fonts, labelOnCream } from "./tokens";
-import { revealContainer, revealItem, revealViewport, EASE } from "./motion";
+import { revealContainer, revealItem, flipItem, revealViewport, EASE } from "./motion";
 import Parallax from "./Parallax";
 
 export default function AboutSection() {
@@ -25,7 +25,7 @@ export default function AboutSection() {
         {/* founders illustration */}
         <Parallax amount={34}>
         <motion.div
-          variants={revealItem}
+          variants={flipItem}
           whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.4, ease: EASE }}
           style={{
