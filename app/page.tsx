@@ -1,7 +1,8 @@
 import Providers from "./components/Providers";
 import ScrollHero from "./components/ScrollHero";
 import FeaturesSection from "./components/FeaturesSection";
-import GallerySection from "./components/GallerySection";
+import FlavorsSection from "./components/FlavorsSection";
+import AboutSection from "./components/AboutSection";
 import SpecsSection from "./components/SpecsSection";
 import ClosingCTA from "./components/ClosingCTA";
 
@@ -11,7 +12,8 @@ export default function Home() {
       <main style={{ background: "#F6EEDC" }}>
         <ScrollHero />
         <FeaturesSection />
-        <GallerySection />
+        <FlavorsSection />
+        <AboutSection />
         <SpecsSection />
         <ClosingCTA />
       </main>

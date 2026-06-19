@@ -24,9 +24,27 @@ html { scroll-behavior: smooth; }
   align-items: start;
 }
 
+.vf-about {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.vf-flavor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+}
+.vf-flavor:nth-of-type(even) .vf-flavor-text { order: -1; }
+
 @media (max-width: 768px) {
   .vf-grid-3 { grid-template-columns: 1fr; }
   .vf-gallery { grid-template-columns: 1fr; }
+  .vf-about { grid-template-columns: 1fr; }
+  .vf-flavor { grid-template-columns: 1fr; }
+  .vf-flavor:nth-of-type(even) .vf-flavor-text { order: 0; }
 }
 
 /* Reduced motion: kill CSS transitions/animations and smooth-scroll.
