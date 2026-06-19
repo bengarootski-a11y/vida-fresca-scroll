@@ -11,7 +11,7 @@ const specs: [string, string][] = [
   ["Ice", "Always"],
   ["Size", "16 oz cup"],
   ["Price", "$6 each"],
-  ["Made", "To order, fresh"],
+  ["Texture", "Smooth & icy"],
   ["Ingredients", "Real fruit, never concentrate"],
   ["Artificial Anything", "None"],
   ["First Pop-Up", "July 11, 2026 · Larchmont Village, LA"],

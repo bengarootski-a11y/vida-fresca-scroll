@@ -18,7 +18,7 @@ const iconProps = {
 const features = [
   {
     label: "Real Fruit",
-    copy: "Whole fruit, cut and blended the same day. No powders, no concentrate — just the good stuff.",
+    copy: "Made with real, whole fruit — never powders, never concentrate. Just the good stuff.",
     icon: (
       <svg {...iconProps}>
         <path d="M5 19c0-7 5-13 14-13 0 9-6 14-14 13z" />
@@ -27,8 +27,8 @@ const features = [
     ),
   },
   {
-    label: "Blended to Order",
-    copy: "Every cup is made the moment you walk up, so it's as fresh as the fruit it came from.",
+    label: "Blended Smooth",
+    copy: "Real fruit blended smooth and poured over plenty of ice — cold, easy, and seriously refreshing.",
     icon: (
       <svg {...iconProps}>
         <path d="M6.5 8h11l-1.2 11.3a1 1 0 0 1-1 .9H8.7a1 1 0 0 1-1-.9L6.5 8z" />
@@ -69,7 +69,7 @@ const features = [
   },
   {
     label: "Made in LA",
-    copy: "Blended fresh and served cold at our Los Angeles pop-ups. Catch the sunshine in a cup.",
+    copy: "Served ice-cold at our Los Angeles pop-ups. Catch the sunshine in a cup.",
     icon: (
       <svg {...iconProps}>
         <path d="M12 21c4.5-4.2 7-7.6 7-11a7 7 0 1 0-14 0c0 3.4 2.5 6.8 7 11z" />

@@ -72,9 +72,9 @@ export default function AboutSection() {
             }}
           >
             Vida Fresca started with two friends and a blender, chasing the
-            bright, just-blended fruit drinks they grew up loving. Theo and Cade
+            bright, blended fruit drinks they grew up loving. Theo and Cade
             began making them for everyone they knew — and the line kept growing.
-            Now they bring that same fresh-cut, made-to-order energy to Los
+            Now they bring that same real-fruit, ice-cold energy to Los
             Angeles, one cup at a time.
           </motion.p>
 

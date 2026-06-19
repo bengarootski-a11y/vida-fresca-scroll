@@ -25,7 +25,7 @@ const caveat = Caveat({
 
 export const metadata: Metadata = {
   title: "Vida Fresca — Fresh Fruit Drinks",
-  description: "Real fruit, blended fresh and made for sunny LA days.",
+  description: "Real fruit drinks, ice-cold and made for sunny LA days.",
 };
 
 export default function RootLayout({
