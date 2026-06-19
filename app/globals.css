@@ -1,0 +1,20 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #06180C;
+  color: #FCEDD8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+html { scroll-behavior: smooth; }
+
+/* Features: 3-up auto-fill grid that collapses to a single column on mobile. */
+.vf-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.75rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .vf-features-grid { grid-template-columns: 1fr; }
+}
