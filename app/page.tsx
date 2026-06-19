@@ -1,7 +1,9 @@
 import Providers from "./components/Providers";
-import ScrollHero from "./components/ScrollHero";
+import ScrollProgress from "./components/ScrollProgress";
+import AmbientField from "./components/AmbientField";
+import WaypointNav from "./components/WaypointNav";
+import Hero3 from "./components/Hero3";
 import FeaturesSection from "./components/FeaturesSection";
-import FlavorsSection from "./components/FlavorsSection";
 import AboutSection from "./components/AboutSection";
 import SpecsSection from "./components/SpecsSection";
 import ClosingCTA from "./components/ClosingCTA";
@@ -9,10 +11,12 @@ import ClosingCTA from "./components/ClosingCTA";
 export default function Home() {
   return (
     <Providers>
-      <main style={{ background: "#F6EEDC" }}>
-        <ScrollHero />
+      <ScrollProgress />
+      <AmbientField />
+      <WaypointNav />
+      <main style={{ position: "relative", zIndex: 1, background: "transparent" }}>
+        <Hero3 />
         <FeaturesSection />
-        <FlavorsSection />
         <AboutSection />
         <SpecsSection />
         <ClosingCTA />

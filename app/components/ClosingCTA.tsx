@@ -7,6 +7,7 @@ import { revealContainer, revealItem, revealViewport, EASE } from "./motion";
 export default function ClosingCTA() {
   return (
     <section
+      id="visit"
       style={{
         position: "relative",
         overflow: "hidden",

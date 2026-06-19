@@ -3,13 +3,14 @@
 import { motion } from "framer-motion";
 import { colors, fonts, labelOnCream } from "./tokens";
 import { revealContainer, revealItem, revealViewport, EASE } from "./motion";
+import Parallax from "./Parallax";
 
 export default function AboutSection() {
   return (
     <section
       id="about"
       style={{
-        background: colors.cream,
+        background: "transparent",
         padding: "clamp(4rem, 10vw, 8rem) clamp(1.5rem, 6vw, 5rem)",
       }}
     >
@@ -22,9 +23,10 @@ export default function AboutSection() {
         style={{ maxWidth: 1100, margin: "0 auto" }}
       >
         {/* founders illustration */}
+        <Parallax amount={34}>
         <motion.div
           variants={revealItem}
-          whileHover={{ y: -6, scale: 1.02 }}
+          whileHover={{ scale: 1.02 }}
           transition={{ duration: 0.4, ease: EASE }}
           style={{
             background: "#FFFFFF",
@@ -40,7 +42,37 @@ export default function AboutSection() {
             alt="Vida Fresca founders Theo Seitzman and Cade Snyder, back to back"
             style={{ width: "100%", height: "auto", display: "block" }}
           />
+          <p
+            style={{
+              fontFamily: fonts.script,
+              fontWeight: 700,
+              fontSize: "clamp(1.1rem, 1.9vw, 1.55rem)",
+              color: "#141414",
+              textAlign: "center",
+              margin: "0.5rem 0 0.15rem",
+            }}
+          >
+            made fresh. made simple. made for you.
+          </p>
+          <a
+            href="https://instagram.com/vidafrescala"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "block",
+              fontFamily: fonts.body,
+              fontWeight: 700,
+              fontSize: "0.92rem",
+              letterSpacing: "0.04em",
+              color: "#141414",
+              textAlign: "center",
+              textDecoration: "none",
+            }}
+          >
+            @vidafrescala
+          </a>
         </motion.div>
+        </Parallax>
 
         {/* story */}
         <motion.div variants={revealContainer}>
@@ -100,42 +132,18 @@ export default function AboutSection() {
             Founders
           </motion.p>
 
-          <motion.div
+          <motion.p
             variants={revealItem}
             style={{
-              marginTop: "1.6rem",
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "center",
-              gap: "0.7rem 1.4rem",
+              marginTop: "1.4rem",
+              fontFamily: fonts.body,
+              fontWeight: 400,
+              fontSize: "0.98rem",
+              color: colors.body,
             }}
           >
-            <span
-              style={{
-                fontFamily: fonts.body,
-                fontWeight: 400,
-                fontSize: "0.98rem",
-                color: colors.body,
-              }}
-            >
-              Catch them blending fresh across LA —
-            </span>
-            <motion.a
-              href="https://instagram.com/vidafrescala"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05, color: colors.pinkHover }}
-              style={{
-                fontFamily: fonts.body,
-                fontWeight: 700,
-                fontSize: "0.95rem",
-                color: colors.pinkInk,
-                textDecoration: "none",
-              }}
-            >
-              @vidafrescala →
-            </motion.a>
-          </motion.div>
+            Catch them around Los Angeles all summer long.
+          </motion.p>
         </motion.div>
       </motion.div>
     </section>

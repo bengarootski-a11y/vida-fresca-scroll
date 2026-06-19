@@ -39,6 +39,39 @@ html { scroll-behavior: smooth; }
 }
 .vf-flavor:nth-of-type(even) .vf-flavor-text { order: -1; }
 
+.vf-flavors-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .vf-flavors-row { grid-template-columns: 1fr; gap: 3.5rem; }
+}
+
+/* Flavor hover: the colored glow disc behind the cup blooms on hover. */
+.vf-flavor-col:hover .vf-flavor-glow { opacity: 0.5 !important; }
+
+/* Hero: three drinks stay side-by-side at all sizes. Trim labels on phones. */
+@media (max-width: 560px) {
+  .vf-hero3-note { display: none; }
+  .vf-hero3-name { font-size: 0.78rem !important; }
+}
+
+/* Waypoint rail: hide on narrow screens (no room beside content). */
+@media (max-width: 900px) {
+  .vf-waypoints { display: none !important; }
+}
+
+.vf-stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 720px) {
+  .vf-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 768px) {
   .vf-grid-3 { grid-template-columns: 1fr; }
   .vf-gallery { grid-template-columns: 1fr; }

@@ -110,7 +110,7 @@ export default function FeaturesSection() {
     <section
       id="features"
       style={{
-        background: colors.cream,
+        background: "transparent",
         padding: "clamp(4.5rem, 10vw, 8.5rem) clamp(1.5rem, 6vw, 5rem)",
       }}
     >
