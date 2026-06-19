@@ -22,6 +22,7 @@ yarn-error.log*
 # local working files (sources/derived copies live under public/)
 /assets
 /frames
-/shots
+/shots*
 /hero.mp4
+/hero_2k.mp4
 shoot.mjs
