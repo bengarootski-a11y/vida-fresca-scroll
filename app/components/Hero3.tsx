@@ -17,6 +17,8 @@ type Drink = {
   note: string;
   accent: string;
   zoom: number; // per-drink scale so the three read at a consistent size
+  cupDx: number; // px the cup sits off frame-centre (garnish skew) — re-centre it
+  cupBottom: number; // frame-y of the cup base — anchor it to the shared baseline
 };
 
 const DRINKS: Drink[] = [
@@ -28,6 +30,8 @@ const DRINKS: Drink[] = [
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
     zoom: 1.16,
+    cupDx: 60,
+    cupBottom: 670,
   },
   {
     key: "mango",
@@ -37,6 +41,8 @@ const DRINKS: Drink[] = [
     note: "Lush, sweet, golden.",
     accent: colors.mango,
     zoom: 1.0,
+    cupDx: -30,
+    cupBottom: 670,
   },
   {
     key: "pa",
@@ -46,6 +52,8 @@ const DRINKS: Drink[] = [
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
     zoom: 1.07,
+    cupDx: -29,
+    cupBottom: 664,
   },
 ];
 
@@ -83,9 +91,18 @@ export default function Hero3() {
       const scale = Math.min(cw / iw, ch / ih) * (DRINKS[d]?.zoom ?? 1);
       const dw = iw * scale;
       const dh = ih * scale;
-      // Bottom-anchor on a shared baseline so all three cups line up exactly
-      // and the ingredients fly up from a fixed cup as you scroll.
-      ctx.drawImage(img, (cw - dw) / 2, ch * 0.85 - dh, dw, dh);
+      // Anchor on the actual cup (not the garnish-skewed frame): centre the cup
+      // horizontally and sit its base on the shared baseline, so all three cups
+      // line up and the names sit centred under them.
+      const cupDx = DRINKS[d]?.cupDx ?? 0;
+      const cupBottom = DRINKS[d]?.cupBottom ?? ih;
+      ctx.drawImage(
+        img,
+        (cw - dw) / 2 - cupDx * scale,
+        ch * 0.85 - cupBottom * scale,
+        dw,
+        dh,
+      );
       currentIdx[d] = idx;
     };
 
