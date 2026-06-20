@@ -17,7 +17,7 @@ type Drink = {
   note: string;
   accent: string;
   zoom: number; // per-drink scale so the three read at a consistent size
-  cupDx: number; // px the cup sits off frame-centre (garnish skew) — re-centre it
+  hold: number; // frame-x to pin the (spinning, drifting) cup at — keeps it centred
   cupBottom: number; // frame-y of the cup base — anchor it to the shared baseline
 };
 
@@ -29,8 +29,8 @@ const DRINKS: Drink[] = [
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
-    zoom: 1.0,
-    cupDx: 14,
+    zoom: 1.1,
+    hold: 222,
     cupBottom: 610,
   },
   {
@@ -40,8 +40,8 @@ const DRINKS: Drink[] = [
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
-    zoom: 1.0,
-    cupDx: -3,
+    zoom: 1.1,
+    hold: 224,
     cupBottom: 610,
   },
   {
@@ -51,11 +51,33 @@ const DRINKS: Drink[] = [
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
-    zoom: 1.0,
-    cupDx: -15,
+    zoom: 1.1,
+    hold: 222,
     cupBottom: 610,
   },
 ];
+
+// The cups drift right as they spin (~203 → 246 px in frame-x — a seedance
+// quirk that no prompt removed). This measured curve lets us pin the cup to a
+// fixed spot every frame, so it spins IN PLACE and never slides off-centre.
+const DRIFT: [number, number][] = [
+  [0, 203],
+  [0.3333, 232],
+  [0.6667, 243],
+  [1, 246],
+];
+const driftCenter = (p: number) => {
+  for (let i = 1; i < DRIFT.length; i++) {
+    if (p <= DRIFT[i][0]) {
+      const [p0, c0] = DRIFT[i - 1];
+      const [p1, c1] = DRIFT[i];
+      return c0 + ((c1 - c0) * (p - p0)) / (p1 - p0);
+    }
+  }
+  return DRIFT[DRIFT.length - 1][1];
+};
+// Cup baseline as a fraction of stage height (sits a touch higher than before).
+const BASELINE = 0.82;
 
 const framePath = (dir: string, i: number) =>
   `${dir}/frame_${String(i + 1).padStart(4, "0")}.jpg`;
@@ -91,15 +113,19 @@ export default function Hero3() {
       const scale = Math.min(cw / iw, ch / ih) * (DRINKS[d]?.zoom ?? 1);
       const dw = iw * scale;
       const dh = ih * scale;
-      // Anchor on the actual cup (not the garnish-skewed frame): centre the cup
-      // horizontally and sit its base on the shared baseline, so all three cups
-      // line up and the names sit centred under them.
-      const cupDx = DRINKS[d]?.cupDx ?? 0;
-      const cupBottom = DRINKS[d]?.cupBottom ?? ih;
+      // Pin the spinning cup to a fixed frame-x (`hold`) every frame: the cup
+      // naturally drifts to driftCenter(progress), so shift by (hold - that) to
+      // cancel the drift. Result: it spins in place, stays centred under its
+      // name, and the garnish never slides off the edge. Base sits on BASELINE.
+      const drink = DRINKS[d];
+      const progress = drink.count > 1 ? idx / (drink.count - 1) : 0;
+      const cupCenter = driftCenter(progress);
+      const hold = drink?.hold ?? cupCenter;
+      const cupBottom = drink?.cupBottom ?? ih;
       ctx.drawImage(
         img,
-        (cw - dw) / 2 - cupDx * scale,
-        ch * 0.85 - cupBottom * scale,
+        (cw - dw) / 2 + (hold - cupCenter) * scale,
+        ch * BASELINE - cupBottom * scale,
         dw,
         dh,
       );
@@ -314,7 +340,7 @@ export default function Hero3() {
           className="vf-hero3-labels"
           style={{
             position: "absolute",
-            top: "86.5%",
+            top: "83.5%",
             left: 0,
             right: 0,
             zIndex: 3,
