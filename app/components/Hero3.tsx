@@ -18,6 +18,7 @@ type Drink = {
   accent: string;
   zoom: number; // per-drink scale so the three read at a consistent size
   hold: number; // frame-x to pin the (spinning, drifting) cup at — keeps it centred
+  driftPts: [number, number][]; // measured cup-centre vs scroll progress (per drink)
   cupBottom: number; // frame-y of the cup base — anchor it to the shared baseline
 };
 
@@ -29,8 +30,14 @@ const DRINKS: Drink[] = [
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
-    zoom: 1.1,
-    hold: 222,
+    zoom: 1.2,
+    hold: 226,
+    driftPts: [
+      [0, 250],
+      [0.333, 237],
+      [0.667, 232],
+      [1, 232],
+    ],
     cupBottom: 610,
   },
   {
@@ -40,8 +47,14 @@ const DRINKS: Drink[] = [
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
-    zoom: 1.1,
-    hold: 224,
+    zoom: 1.2,
+    hold: 226,
+    driftPts: [
+      [0, 239],
+      [0.333, 244],
+      [0.667, 242],
+      [1, 243],
+    ],
     cupBottom: 610,
   },
   {
@@ -51,30 +64,31 @@ const DRINKS: Drink[] = [
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
-    zoom: 1.1,
-    hold: 222,
+    zoom: 1.2,
+    hold: 226,
+    driftPts: [
+      [0, 214],
+      [0.333, 242],
+      [0.667, 252],
+      [1, 253],
+    ],
     cupBottom: 610,
   },
 ];
 
-// The cups drift right as they spin (~203 → 246 px in frame-x — a seedance
-// quirk that no prompt removed). This measured curve lets us pin the cup to a
-// fixed spot every frame, so it spins IN PLACE and never slides off-centre.
-const DRIFT: [number, number][] = [
-  [0, 203],
-  [0.3333, 232],
-  [0.6667, 243],
-  [1, 246],
-];
-const driftCenter = (p: number) => {
-  for (let i = 1; i < DRIFT.length; i++) {
-    if (p <= DRIFT[i][0]) {
-      const [p0, c0] = DRIFT[i - 1];
-      const [p1, c1] = DRIFT[i];
+// As the cups spin they drift sideways (a seedance quirk no prompt removed),
+// differently per drink. Each drink carries its measured cup-centre-vs-progress
+// curve (driftPts); we pin the cup to a fixed spot every frame so it spins IN
+// PLACE and never slides off-centre. Piecewise-linear lookup:
+const driftCenter = (pts: [number, number][], p: number) => {
+  for (let i = 1; i < pts.length; i++) {
+    if (p <= pts[i][0]) {
+      const [p0, c0] = pts[i - 1];
+      const [p1, c1] = pts[i];
       return c0 + ((c1 - c0) * (p - p0)) / (p1 - p0);
     }
   }
-  return DRIFT[DRIFT.length - 1][1];
+  return pts[pts.length - 1][1];
 };
 // Cup baseline as a fraction of stage height (sits a touch higher than before).
 const BASELINE = 0.82;
@@ -119,7 +133,7 @@ export default function Hero3() {
       // name, and the garnish never slides off the edge. Base sits on BASELINE.
       const drink = DRINKS[d];
       const progress = drink.count > 1 ? idx / (drink.count - 1) : 0;
-      const cupCenter = driftCenter(progress);
+      const cupCenter = driftCenter(drink.driftPts, progress);
       const hold = drink?.hold ?? cupCenter;
       const cupBottom = drink?.cupBottom ?? ih;
       ctx.drawImage(
