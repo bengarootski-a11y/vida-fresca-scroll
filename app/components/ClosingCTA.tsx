@@ -93,7 +93,7 @@ export default function ClosingCTA() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "0.35rem",
+            gap: "0.55rem",
           }}
         >
           <span
@@ -113,7 +113,8 @@ export default function ClosingCTA() {
               fontFamily: fonts.display,
               fontWeight: 400,
               fontSize: "clamp(2.6rem, 7vw, 5rem)",
-              lineHeight: 0.95,
+              lineHeight: 1.12,
+              paddingBottom: "0.08em",
               color: colors.creamText,
             }}
           >
