@@ -58,6 +58,7 @@ export default function AboutSection() {
             href="https://instagram.com/vidafrescala"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Follow Vida Fresca on Instagram"
             style={{
               display: "block",
               fontFamily: fonts.body,

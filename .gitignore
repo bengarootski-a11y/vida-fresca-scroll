@@ -27,4 +27,5 @@ yarn-error.log*
 /shots*
 /hero.mp4
 /hero_2k.mp4
-shoot.mjs
+shoot*.mjs
+diag*.mjs

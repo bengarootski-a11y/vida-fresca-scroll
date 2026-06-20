@@ -4,10 +4,40 @@ body {
   background: #F6EEDC; /* brand cream */
   color: #3E4B43;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
 html { scroll-behavior: smooth; }
+
+/* Keyboard focus: a single, visible brand ring on every interactive element.
+   Mouse/touch users never see it (focus-visible only); keyboard users always do. */
+:focus-visible {
+  outline: 3px solid #F92C6E;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* Skip link — first focusable element; slides into view only when focused. */
+.vf-skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(-160%);
+  transition: transform 0.2s ease;
+  background: #1A4D2E;
+  color: #F6EEDC;
+  font-family: var(--font-jakarta), system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.7rem 1.1rem;
+  border-radius: 10px;
+  text-decoration: none;
+}
+.vf-skip-link:focus-visible { transform: translateY(0); }
 
 /* Lenis smooth scroll */
 html.lenis, html.lenis body { height: auto; }

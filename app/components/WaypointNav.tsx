@@ -81,11 +81,13 @@ export default function WaypointNav() {
             style={{
               display: "flex",
               alignItems: "center",
+              justifyContent: "flex-end",
               gap: 8,
               background: "none",
               border: "none",
               cursor: "pointer",
-              padding: 0,
+              padding: "6px 2px 6px 14px",
+              borderRadius: 999,
             }}
             className="vf-waypoint"
           >

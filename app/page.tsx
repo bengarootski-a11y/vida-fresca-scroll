@@ -9,15 +9,22 @@ import FeaturesSection from "./components/FeaturesSection";
 import AboutSection from "./components/AboutSection";
 import SpecsSection from "./components/SpecsSection";
 import ClosingCTA from "./components/ClosingCTA";
+import SiteFooter from "./components/SiteFooter";
 
 export default function Home() {
   return (
     <Providers>
+      <a href="#content" className="vf-skip-link">
+        Skip to content
+      </a>
       <SmoothScroll />
       <ScrollProgress />
       <AmbientField />
       <WaypointNav />
-      <main style={{ position: "relative", zIndex: 1, background: "transparent" }}>
+      <main
+        id="content"
+        style={{ position: "relative", zIndex: 1, background: "transparent" }}
+      >
         <Hero3 />
         <IngredientsSection />
         <FeaturesSection />
@@ -25,6 +32,7 @@ export default function Home() {
         <SpecsSection />
         <ClosingCTA />
       </main>
+      <SiteFooter />
     </Providers>
   );
 }

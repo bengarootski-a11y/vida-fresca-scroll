@@ -19,7 +19,7 @@ export const colors = {
   // Text
   ink: "#1A4D2E", // headings on cream
   body: "#3E4B43", // body copy on cream
-  dim: "#6F7E72", // muted on cream (never lighter than this)
+  dim: "#5C6A61", // muted on cream — AA-compliant (4.9:1), never lighter than this
   creamText: "#FCEDD8", // text on the dark hero
   creamBody: "#E7DAC2", // soft text on the dark hero
   // Flavor colors

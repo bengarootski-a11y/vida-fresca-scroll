@@ -223,6 +223,8 @@ export default function Hero3() {
                 ref={(el) => {
                   canvasRefs.current[d] = el;
                 }}
+                role="img"
+                aria-label={`${drink.name} — ${drink.note}`}
                 style={{ display: "block", width: "100%", height: "100%" }}
               />
             </div>
