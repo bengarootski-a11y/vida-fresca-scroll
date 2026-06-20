@@ -29,9 +29,9 @@ const DRINKS: Drink[] = [
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
-    zoom: 1.05,
+    zoom: 1.2,
     cupDx: 0,
-    cupBottom: 590,
+    cupBottom: 595,
   },
   {
     key: "mango",
@@ -40,9 +40,9 @@ const DRINKS: Drink[] = [
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
-    zoom: 1.05,
+    zoom: 1.2,
     cupDx: 0,
-    cupBottom: 590,
+    cupBottom: 595,
   },
   {
     key: "pa",
@@ -51,9 +51,9 @@ const DRINKS: Drink[] = [
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
-    zoom: 1.05,
+    zoom: 1.2,
     cupDx: 0,
-    cupBottom: 590,
+    cupBottom: 595,
   },
 ];
 
