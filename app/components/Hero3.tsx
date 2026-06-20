@@ -18,8 +18,8 @@ type Drink = {
   accent: string;
   zoom: number; // per-drink scale so the three read at a consistent size
   hold: number; // frame-x to pin the (spinning, drifting) cup at — keeps it centred
-  driftPts: [number, number][]; // measured cup-centre vs scroll progress (per drink)
-  cupBottom: number; // frame-y of the cup base — anchor it to the shared baseline
+  driftPts: [number, number][]; // measured cup-centre (frame-x) vs scroll progress
+  baseYPts: [number, number][]; // measured cup-base (frame-y) vs scroll progress
 };
 
 const DRINKS: Drink[] = [
@@ -33,11 +33,17 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 265],
-      [0.5, 266],
-      [1, 270],
+      [0, 225],
+      [0.25, 237],
+      [0.5, 257],
+      [0.75, 263],
+      [1, 264],
     ],
-    cupBottom: 610,
+    baseYPts: [
+      [0, 589],
+      [0.5, 605],
+      [1, 613],
+    ],
   },
   {
     key: "mango",
@@ -50,10 +56,16 @@ const DRINKS: Drink[] = [
     hold: 245,
     driftPts: [
       [0, 227],
-      [0.5, 240],
+      [0.25, 235],
+      [0.5, 242],
+      [0.75, 245],
       [1, 245],
     ],
-    cupBottom: 610,
+    baseYPts: [
+      [0, 589],
+      [0.5, 605],
+      [1, 613],
+    ],
   },
   {
     key: "pa",
@@ -65,19 +77,25 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 214],
-      [0.5, 227],
-      [1, 223],
+      [0, 215],
+      [0.25, 221],
+      [0.5, 223],
+      [0.75, 224],
+      [1, 224],
     ],
-    cupBottom: 610,
+    baseYPts: [
+      [0, 600],
+      [0.5, 608],
+      [1, 612],
+    ],
   },
 ];
 
-// As the cups spin they drift sideways (a seedance quirk no prompt removed),
-// differently per drink. Each drink carries its measured cup-centre-vs-progress
-// curve (driftPts); we pin the cup to a fixed spot every frame so it spins IN
-// PLACE and never slides off-centre. Piecewise-linear lookup:
-const driftCenter = (pts: [number, number][], p: number) => {
+// As the cups spin they drift sideways AND down (a seedance quirk no prompt
+// removed), differently per drink. Each drink carries its measured
+// cup-centre-x (driftPts) and cup-base-y (baseYPts) curves; we re-pin the cup
+// to a fixed spot every frame so it spins IN PLACE and never slides. Lookup:
+const lerpPts = (pts: [number, number][], p: number) => {
   for (let i = 1; i < pts.length; i++) {
     if (p <= pts[i][0]) {
       const [p0, c0] = pts[i - 1];
@@ -92,7 +110,7 @@ const BASELINE = 0.82;
 
 // ?v bust: frame files keep the same names across regenerations, so bump this
 // whenever the frames change to force browsers to fetch the new images.
-const FRAMES_VERSION = 11;
+const FRAMES_VERSION = 12;
 const framePath = (dir: string, i: number) =>
   `${dir}/frame_${String(i + 1).padStart(4, "0")}.jpg?v=${FRAMES_VERSION}`;
 
@@ -133,9 +151,9 @@ export default function Hero3() {
       // name, and the garnish never slides off the edge. Base sits on BASELINE.
       const drink = DRINKS[d];
       const progress = drink.count > 1 ? idx / (drink.count - 1) : 0;
-      const cupCenter = driftCenter(drink.driftPts, progress);
+      const cupCenter = lerpPts(drink.driftPts, progress);
       const hold = drink?.hold ?? cupCenter;
-      const cupBottom = drink?.cupBottom ?? ih;
+      const cupBottom = lerpPts(drink.baseYPts, progress);
       ctx.drawImage(
         img,
         (cw - dw) / 2 + (hold - cupCenter) * scale,
