@@ -95,16 +95,6 @@ export default function SiteFooter() {
             </svg>
             @vidafrescala
           </a>
-          <span
-            style={{
-              fontFamily: fonts.body,
-              fontWeight: 500,
-              fontSize: "0.92rem",
-              color: colors.creamBody,
-            }}
-          >
-            July 11 · Larchmont Village, LA
-          </span>
         </nav>
       </div>
 

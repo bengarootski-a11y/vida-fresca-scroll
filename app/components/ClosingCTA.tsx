@@ -144,8 +144,8 @@ export default function ClosingCTA() {
             maxWidth: 480,
           }}
         >
-          Real fruit, real ice, real LA sunshine. Roll up for the very first
-          Vida Fresca pour — and bring the whole crew.
+          Real organic fruit, real ice, real LA sunshine — come taste the very
+          first Vida Fresca pour.
         </motion.p>
 
         <motion.a
