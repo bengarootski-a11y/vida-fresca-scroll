@@ -27,7 +27,7 @@ const DRINKS: Drink[] = [
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
-    zoom: 1.05,
+    zoom: 1.14,
   },
   {
     key: "mango",
@@ -36,7 +36,7 @@ const DRINKS: Drink[] = [
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
-    zoom: 1.24,
+    zoom: 0.95,
   },
   {
     key: "pa",
@@ -45,7 +45,7 @@ const DRINKS: Drink[] = [
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
-    zoom: 1.14,
+    zoom: 1.02,
   },
 ];
 
