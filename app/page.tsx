@@ -1,4 +1,5 @@
 import Providers from "./components/Providers";
+import SmoothScroll from "./components/SmoothScroll";
 import ScrollProgress from "./components/ScrollProgress";
 import AmbientField from "./components/AmbientField";
 import WaypointNav from "./components/WaypointNav";
@@ -11,6 +12,7 @@ import ClosingCTA from "./components/ClosingCTA";
 export default function Home() {
   return (
     <Providers>
+      <SmoothScroll />
       <ScrollProgress />
       <AmbientField />
       <WaypointNav />

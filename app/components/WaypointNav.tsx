@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { colors, fonts } from "./tokens";
+import { getLenis } from "./lenisInstance";
 
 // Fixed waypoint rail on the right edge. One dot per major section; the active
 // dot (the section currently filling the viewport) grows and fills pink. Uses
@@ -67,11 +68,13 @@ export default function WaypointNav() {
         return (
           <button
             key={w.id}
-            onClick={() =>
-              document
-                .getElementById(w.id)
-                ?.scrollIntoView({ behavior: "smooth", block: "start" })
-            }
+            onClick={() => {
+              const el = document.getElementById(w.id);
+              if (!el) return;
+              const lenis = getLenis();
+              if (lenis) lenis.scrollTo(el, { offset: 0 });
+              else el.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
             aria-label={`Go to ${w.label}`}
             aria-current={on ? "true" : undefined}
             style={{
