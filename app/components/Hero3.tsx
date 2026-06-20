@@ -30,8 +30,8 @@ const DRINKS: Drink[] = [
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
     zoom: 1.2,
-    cupDx: 0,
-    cupBottom: 595,
+    cupDx: 8,
+    cupBottom: 605,
   },
   {
     key: "mango",
@@ -41,8 +41,8 @@ const DRINKS: Drink[] = [
     note: "Lush, sweet, golden.",
     accent: colors.mango,
     zoom: 1.2,
-    cupDx: 0,
-    cupBottom: 595,
+    cupDx: 7,
+    cupBottom: 605,
   },
   {
     key: "pa",
@@ -52,8 +52,8 @@ const DRINKS: Drink[] = [
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
     zoom: 1.2,
-    cupDx: 0,
-    cupBottom: 595,
+    cupDx: 3,
+    cupBottom: 605,
   },
 ];
 
