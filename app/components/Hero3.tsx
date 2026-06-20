@@ -27,7 +27,7 @@ const DRINKS: Drink[] = [
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
-    zoom: 1.14,
+    zoom: 1.05,
   },
   {
     key: "mango",
@@ -36,7 +36,7 @@ const DRINKS: Drink[] = [
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
-    zoom: 0.95,
+    zoom: 0.88,
   },
   {
     key: "pa",
@@ -45,7 +45,7 @@ const DRINKS: Drink[] = [
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
-    zoom: 1.02,
+    zoom: 0.95,
   },
 ];
 
@@ -83,7 +83,9 @@ export default function Hero3() {
       const scale = Math.min(cw / iw, ch / ih) * (DRINKS[d]?.zoom ?? 1);
       const dw = iw * scale;
       const dh = ih * scale;
-      ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      // Bottom-anchor on a shared baseline so all three cups line up exactly
+      // and the ingredients fly up from a fixed cup as you scroll.
+      ctx.drawImage(img, (cw - dw) / 2, ch * 0.83 - dh, dw, dh);
       currentIdx[d] = idx;
     };
 
@@ -280,11 +282,11 @@ export default function Hero3() {
             bottom: 0,
             left: 0,
             right: 0,
-            height: "28vh",
+            height: "16vh",
             zIndex: 2,
             pointerEvents: "none",
             background:
-              "linear-gradient(to top, rgba(246,238,220,0.97) 0%, rgba(246,238,220,0.62) 48%, rgba(246,238,220,0) 100%)",
+              "linear-gradient(to top, rgba(246,238,220,0.98) 0%, rgba(246,238,220,0.7) 55%, rgba(246,238,220,0) 100%)",
           }}
         />
 

@@ -79,6 +79,17 @@ html.lenis, html.lenis body { height: auto; }
   .vf-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* Ingredients: 3 columns matching the hero, single column on mobile */
+.vf-ingredients-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+  align-items: start;
+}
+@media (max-width: 800px) {
+  .vf-ingredients-row { grid-template-columns: 1fr; gap: 1.25rem; }
+}
+
 @media (max-width: 768px) {
   .vf-grid-3 { grid-template-columns: 1fr; }
   .vf-gallery { grid-template-columns: 1fr; }

@@ -8,7 +8,7 @@ const stats = [
   { value: "$6", label: "per cup" },
   { value: "Iced", label: "over real ice" },
   { value: "3", label: "signature flavors" },
-  { value: "100%", label: "real fruit" },
+  { value: "100%", label: "organic" },
   { value: "0", label: "artificial anything" },
 ];
 
@@ -99,8 +99,8 @@ export default function SpecsSection() {
             margin: "2.4rem auto 0",
           }}
         >
-          Real fruit blended with water and a touch of cane sugar — never
-          concentrate, always over ice.
+          Organic fruit, a squeeze of lime, and our house-made simple syrup —
+          never concentrate, always over ice.
         </motion.p>
 
         <motion.div

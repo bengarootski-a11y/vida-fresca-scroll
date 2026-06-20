@@ -17,8 +17,8 @@ const iconProps = {
 
 const features = [
   {
-    label: "Real Fruit",
-    copy: "Made with real, whole fruit — never powders, never concentrate. Just the good stuff.",
+    label: "Organic Fruit",
+    copy: "Made with organic, whole fruit — never powders, never concentrate. Just the good stuff.",
     icon: (
       <svg {...iconProps}>
         <path d="M5 19c0-7 5-13 14-13 0 9-6 14-14 13z" />
@@ -28,7 +28,7 @@ const features = [
   },
   {
     label: "Blended Smooth",
-    copy: "Real fruit blended smooth and poured over plenty of ice — cold, easy, and seriously refreshing.",
+    copy: "Organic fruit blended smooth and poured over plenty of ice — cold, easy, and seriously refreshing.",
     icon: (
       <svg {...iconProps}>
         <path d="M6.5 8h11l-1.2 11.3a1 1 0 0 1-1 .9H8.7a1 1 0 0 1-1-.9L6.5 8z" />
@@ -50,7 +50,7 @@ const features = [
   },
   {
     label: "No Artificial Anything",
-    copy: "No dyes, no syrups, no preservatives. If it isn't real fruit, it isn't going in the cup.",
+    copy: "No dyes, no concentrate, no preservatives. If it isn't organic, it isn't going in the cup.",
     icon: (
       <svg {...iconProps}>
         <circle cx="12" cy="12" r="8" />
@@ -59,8 +59,8 @@ const features = [
     ),
   },
   {
-    label: "Naturally Sweet",
-    copy: "Ripe fruit and a whisper of cane sugar. Refreshing and light, never sugary.",
+    label: "House-Made Simple Syrup",
+    copy: "Sweetened with our own simple syrup, simmered from organic cane sugar. Light, never sugary.",
     icon: (
       <svg {...iconProps}>
         <path d="M12 4.5c3.2 4 5 6.6 5 9.5a5 5 0 0 1-10 0c0-2.9 1.8-5.5 5-9.5z" />
@@ -137,7 +137,7 @@ export default function FeaturesSection() {
             margin: "1rem 0 2.8rem",
           }}
         >
-          Real. Fresh. Simple.
+          Organic. Fresh. Simple.
         </motion.h2>
 
         <motion.div className="vf-grid-3" variants={revealContainer}>

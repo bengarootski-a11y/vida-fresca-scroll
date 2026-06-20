@@ -4,6 +4,7 @@ import ScrollProgress from "./components/ScrollProgress";
 import AmbientField from "./components/AmbientField";
 import WaypointNav from "./components/WaypointNav";
 import Hero3 from "./components/Hero3";
+import IngredientsSection from "./components/IngredientsSection";
 import FeaturesSection from "./components/FeaturesSection";
 import AboutSection from "./components/AboutSection";
 import SpecsSection from "./components/SpecsSection";
@@ -18,6 +19,7 @@ export default function Home() {
       <WaypointNav />
       <main style={{ position: "relative", zIndex: 1, background: "transparent" }}>
         <Hero3 />
+        <IngredientsSection />
         <FeaturesSection />
         <AboutSection />
         <SpecsSection />

@@ -9,6 +9,7 @@ import { getLenis } from "./lenisInstance";
 // IntersectionObserver — no scroll listener. Click a dot to glide to a section.
 const WAYPOINTS = [
   { id: "top", label: "Drinks" },
+  { id: "ingredients", label: "Inside" },
   { id: "features", label: "Why" },
   { id: "about", label: "About" },
   { id: "specs", label: "Details" },
