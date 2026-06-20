@@ -23,29 +23,29 @@ const DRINKS: Drink[] = [
   {
     key: "wm",
     dir: "/frames",
-    count: 193,
+    count: 97,
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
-    zoom: 0.9,
+    zoom: 1.05,
   },
   {
     key: "mango",
     dir: "/frames-mango",
-    count: 121,
+    count: 97,
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
-    zoom: 1.08,
+    zoom: 1.24,
   },
   {
     key: "pa",
     dir: "/frames-pineapple",
-    count: 121,
+    count: 97,
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
-    zoom: 0.98,
+    zoom: 1.14,
   },
 ];
 
@@ -150,7 +150,7 @@ export default function Hero3() {
 
   const titleContainer = {
     hidden: {},
-    visible: { transition: { delayChildren: 0.5, staggerChildren: 0.13 } },
+    visible: { transition: { delayChildren: 0.4, staggerChildren: 0.13 } },
   };
   const fadeUp = {
     hidden: { opacity: 0, y: 32, filter: "blur(10px)" },
@@ -185,27 +185,64 @@ export default function Hero3() {
           height: "100vh",
           overflow: "hidden",
           background: colors.cream,
-          display: "flex",
-          flexDirection: "column",
         }}
       >
+        {/* THREE FULL-HEIGHT DECONSTRUCTING DRINKS */}
+        <div
+          className="vf-hero3-row"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 1,
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+          }}
+        >
+          {DRINKS.map((drink, d) => (
+            <div key={drink.key} style={{ position: "relative", overflow: "hidden" }}>
+              <canvas
+                ref={(el) => {
+                  canvasRefs.current[d] = el;
+                }}
+                style={{ display: "block", width: "100%", height: "100%" }}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* top scrim keeps the title legible over the drinks */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "36vh",
+            zIndex: 2,
+            pointerEvents: "none",
+            background:
+              "linear-gradient(to bottom, rgba(246,238,220,0.97) 0%, rgba(246,238,220,0.78) 42%, rgba(246,238,220,0) 100%)",
+          }}
+        />
+
         {/* TITLE */}
         <motion.div
           variants={titleContainer}
           initial="hidden"
           animate="visible"
           style={{
-            position: "relative",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
             zIndex: 3,
             textAlign: "center",
-            padding: "clamp(1.4rem, 3.5vh, 2.6rem) 1.5rem 0.4rem",
+            padding: "clamp(1.3rem, 3.4vh, 2.8rem) 1.5rem 0",
             pointerEvents: "none",
           }}
         >
-          <motion.span
-            variants={fadeUp}
-            style={{ ...labelOnCream, display: "block" }}
-          >
+          <motion.span variants={fadeUp} style={{ ...labelOnCream, display: "block" }}>
             Fresh Fruit Drinks · Los Angeles
           </motion.span>
           <motion.h1
@@ -213,10 +250,10 @@ export default function Hero3() {
             style={{
               fontFamily: fonts.display,
               fontWeight: 400,
-              fontSize: "clamp(2.4rem, 6.5vw, 5.5rem)",
-              lineHeight: 0.98,
+              fontSize: "clamp(2.7rem, 7.5vw, 6.5rem)",
+              lineHeight: 0.95,
               color: colors.ink,
-              margin: "0.5rem 0 0.3rem",
+              margin: "0.4rem 0 0.22rem",
             }}
           >
             Vida Fresca
@@ -226,7 +263,7 @@ export default function Hero3() {
             style={{
               fontFamily: fonts.script,
               fontWeight: 600,
-              fontSize: "clamp(1.2rem, 2.6vw, 1.9rem)",
+              fontSize: "clamp(1.2rem, 2.6vw, 2rem)",
               color: "#141414",
               lineHeight: 1,
             }}
@@ -235,89 +272,83 @@ export default function Hero3() {
           </motion.p>
         </motion.div>
 
-        {/* THREE DECONSTRUCTING DRINKS */}
+        {/* bottom scrim keeps the flavor labels legible over the splashes */}
         <div
-          className="vf-hero3-row"
+          aria-hidden
           style={{
-            position: "relative",
-            zIndex: 1,
-            flex: 1,
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: "28vh",
+            zIndex: 2,
+            pointerEvents: "none",
+            background:
+              "linear-gradient(to top, rgba(246,238,220,0.97) 0%, rgba(246,238,220,0.62) 48%, rgba(246,238,220,0) 100%)",
+          }}
+        />
+
+        {/* FLAVOR LABELS */}
+        <div
+          className="vf-hero3-labels"
+          style={{
+            position: "absolute",
+            bottom: "clamp(1.6rem, 4.2vh, 3.2rem)",
+            left: 0,
+            right: 0,
+            zIndex: 3,
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            minHeight: 0,
+            pointerEvents: "none",
           }}
         >
-          {DRINKS.map((drink, d) => (
-            <div
-              key={drink.key}
-              style={{
-                position: "relative",
-                display: "flex",
-                flexDirection: "column",
-                minHeight: 0,
-              }}
-            >
-              <canvas
-                ref={(el) => {
-                  canvasRefs.current[d] = el;
-                }}
-                style={{ display: "block", width: "100%", flex: 1, minHeight: 0 }}
-              />
-              {/* flavor label */}
+          {DRINKS.map((drink) => (
+            <div key={drink.key} style={{ textAlign: "center", padding: "0 0.5rem" }}>
               <div
                 style={{
-                  textAlign: "center",
-                  padding:
-                    "clamp(0.4rem, 1.5vh, 1.1rem) 0.5rem clamp(1.6rem, 4vh, 3rem)",
+                  width: 42,
+                  height: 4,
+                  borderRadius: 2,
+                  background: drink.accent,
+                  margin: "0 auto 0.7rem",
+                }}
+              />
+              <h2
+                className="vf-hero3-name"
+                style={{
+                  fontFamily: fonts.display,
+                  fontWeight: 400,
+                  fontSize: "clamp(1.05rem, 2vw, 2rem)",
+                  lineHeight: 1,
+                  color: colors.ink,
                 }}
               >
-                <div
-                  style={{
-                    width: 40,
-                    height: 4,
-                    borderRadius: 2,
-                    background: drink.accent,
-                    margin: "0 auto 0.7rem",
-                  }}
-                />
-                <h2
-                  className="vf-hero3-name"
-                  style={{
-                    fontFamily: fonts.display,
-                    fontWeight: 400,
-                    fontSize: "clamp(1rem, 1.9vw, 1.8rem)",
-                    lineHeight: 1,
-                    color: colors.ink,
-                  }}
-                >
-                  {drink.name}
-                </h2>
-                <p
-                  className="vf-hero3-note"
-                  style={{
-                    fontFamily: fonts.script,
-                    fontWeight: 600,
-                    fontSize: "clamp(0.95rem, 1.4vw, 1.3rem)",
-                    color: colors.pinkInk,
-                    marginTop: "0.15rem",
-                  }}
-                >
-                  {drink.note}
-                </p>
-              </div>
+                {drink.name}
+              </h2>
+              <p
+                className="vf-hero3-note"
+                style={{
+                  fontFamily: fonts.script,
+                  fontWeight: 600,
+                  fontSize: "clamp(0.95rem, 1.4vw, 1.35rem)",
+                  color: colors.pinkInk,
+                  marginTop: "0.15rem",
+                }}
+              >
+                {drink.note}
+              </p>
             </div>
           ))}
         </div>
 
-        {/* scroll hint — a single arrow, tucked into the bottom-left so it
-            never collides with the centre column's label */}
+        {/* scroll hint — bottom-left so it never collides with a label */}
         <div
           ref={hintRef}
           style={{
             position: "absolute",
             bottom: 16,
             left: "clamp(1rem, 3vw, 2.4rem)",
-            zIndex: 3,
+            zIndex: 4,
             display: "flex",
             alignItems: "center",
             gap: 8,
