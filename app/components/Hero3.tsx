@@ -27,7 +27,7 @@ const DRINKS: Drink[] = [
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
-    zoom: 1.05,
+    zoom: 1.16,
   },
   {
     key: "mango",
@@ -36,7 +36,7 @@ const DRINKS: Drink[] = [
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
-    zoom: 0.88,
+    zoom: 1.0,
   },
   {
     key: "pa",
@@ -45,7 +45,7 @@ const DRINKS: Drink[] = [
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
-    zoom: 0.95,
+    zoom: 1.07,
   },
 ];
 
@@ -85,7 +85,7 @@ export default function Hero3() {
       const dh = ih * scale;
       // Bottom-anchor on a shared baseline so all three cups line up exactly
       // and the ingredients fly up from a fixed cup as you scroll.
-      ctx.drawImage(img, (cw - dw) / 2, ch * 0.83 - dh, dw, dh);
+      ctx.drawImage(img, (cw - dw) / 2, ch * 0.85 - dh, dw, dh);
       currentIdx[d] = idx;
     };
 
@@ -290,12 +290,12 @@ export default function Hero3() {
           }}
         />
 
-        {/* FLAVOR LABELS */}
+        {/* FLAVOR LABELS — sit directly under each cup's baseline */}
         <div
           className="vf-hero3-labels"
           style={{
             position: "absolute",
-            bottom: "clamp(1.6rem, 4.2vh, 3.2rem)",
+            top: "86.5%",
             left: 0,
             right: 0,
             zIndex: 3,
