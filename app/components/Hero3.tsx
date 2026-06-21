@@ -33,15 +33,15 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 216],
-      [0.25, 221],
-      [0.5, 240],
-      [0.75, 256],
-      [1, 261],
+      [0, 230],
+      [0.25, 241],
+      [0.5, 258],
+      [0.75, 263],
+      [1, 263],
     ],
     baseYPts: [
-      [0, 616],
-      [0.5, 619],
+      [0, 617],
+      [0.5, 620],
       [1, 621],
     ],
   },
@@ -55,15 +55,15 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 231],
-      [0.25, 235],
-      [0.5, 241],
-      [0.75, 245],
+      [0, 229],
+      [0.25, 242],
+      [0.5, 246],
+      [0.75, 248],
       [1, 247],
     ],
     baseYPts: [
-      [0, 616],
-      [0.5, 619],
+      [0, 617],
+      [0.5, 620],
       [1, 621],
     ],
   },
@@ -78,13 +78,13 @@ const DRINKS: Drink[] = [
     hold: 245,
     driftPts: [
       [0, 235],
-      [0.25, 242],
-      [0.5, 242],
+      [0.25, 245],
+      [0.5, 241],
       [0.75, 237],
-      [1, 235],
+      [1, 237],
     ],
     baseYPts: [
-      [0, 618],
+      [0, 617],
       [0.5, 620],
       [1, 621],
     ],
@@ -110,7 +110,7 @@ const BASELINE = 0.82;
 
 // ?v bust: frame files keep the same names across regenerations, so bump this
 // whenever the frames change to force browsers to fetch the new images.
-const FRAMES_VERSION = 19;
+const FRAMES_VERSION = 20;
 const framePath = (dir: string, i: number) =>
   `${dir}/frame_${String(i + 1).padStart(4, "0")}.jpg?v=${FRAMES_VERSION}`;
 
