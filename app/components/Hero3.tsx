@@ -300,10 +300,10 @@ export default function Hero3() {
           ))}
         </div>
 
-        {/* TITLE — stays fully visible the whole scroll; the decompose flies UP
-            behind it (canvas is zIndex 1, title is zIndex 3). No masking scrim,
-            so the contents are never cut off; a soft glow keeps the type legible
-            where the splashes pass behind it. */}
+        {/* TITLE — always on top (zIndex 3) over the decompose canvas (zIndex 1),
+            so the splashes fly UP behind the type and are never cut off. No
+            scrim and no soft cream glow (those masked the contents near the
+            text); just a tight shadow on the letters for legibility. */}
         <motion.div
           variants={titleContainer}
           initial="hidden"
@@ -324,7 +324,7 @@ export default function Hero3() {
             style={{
               ...labelOnCream,
               display: "block",
-              textShadow: "0 1px 10px rgba(246,238,220,0.9)",
+              textShadow: "0 1px 3px rgba(255,255,255,0.7)",
             }}
           >
             Fresh Fruit Drinks · Los Angeles
@@ -339,7 +339,7 @@ export default function Hero3() {
               color: colors.ink,
               margin: "0.4rem 0 0.22rem",
               textShadow:
-                "0 2px 16px rgba(246,238,220,0.95), 0 0 30px rgba(246,238,220,0.8)",
+                "0 1px 2px rgba(255,255,255,0.85), 0 2px 4px rgba(14,52,32,0.28)",
             }}
           >
             Vida Fresca
@@ -352,7 +352,7 @@ export default function Hero3() {
               fontSize: "clamp(1.2rem, 2.6vw, 2rem)",
               color: "#141414",
               lineHeight: 1,
-              textShadow: "0 1px 12px rgba(246,238,220,0.95)",
+              textShadow: "0 1px 3px rgba(255,255,255,0.85)",
             }}
           >
             made fresh. made simple. made for you.
