@@ -110,7 +110,7 @@ const BASELINE = 0.82;
 
 // ?v bust: frame files keep the same names across regenerations, so bump this
 // whenever the frames change to force browsers to fetch the new images.
-const FRAMES_VERSION = 18;
+const FRAMES_VERSION = 19;
 const framePath = (dir: string, i: number) =>
   `${dir}/frame_${String(i + 1).padStart(4, "0")}.jpg?v=${FRAMES_VERSION}`;
 
@@ -118,8 +118,6 @@ export default function Hero3() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const hintRef = useRef<HTMLDivElement>(null);
-  const scrimRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -221,11 +219,6 @@ export default function Hero3() {
       });
       if (hintRef.current)
         hintRef.current.style.opacity = String(Math.max(0, 1 - progress * 4));
-      // Fade the title + top scrim as the decompose begins so the contents
-      // flying up are never clipped/masked by the header.
-      const headerFade = Math.max(0, Math.min(1, 1 - progress * 3.4));
-      if (scrimRef.current) scrimRef.current.style.opacity = String(headerFade);
-      if (titleRef.current) titleRef.current.style.opacity = String(headerFade);
       rafId = requestAnimationFrame(tick);
     };
     rafId = requestAnimationFrame(tick);
@@ -307,28 +300,11 @@ export default function Hero3() {
           ))}
         </div>
 
-        {/* top scrim keeps the title legible over the full cups; both it and
-            the title fade out as you scroll so the flying contents aren't
-            masked by the header during the decompose. */}
-        <div
-          ref={scrimRef}
-          aria-hidden
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "30vh",
-            zIndex: 2,
-            pointerEvents: "none",
-            background:
-              "linear-gradient(to bottom, rgba(246,238,220,0.97) 0%, rgba(246,238,220,0.7) 45%, rgba(246,238,220,0) 100%)",
-          }}
-        />
-
-        {/* TITLE */}
+        {/* TITLE — stays fully visible the whole scroll; the decompose flies UP
+            behind it (canvas is zIndex 1, title is zIndex 3). No masking scrim,
+            so the contents are never cut off; a soft glow keeps the type legible
+            where the splashes pass behind it. */}
         <motion.div
-          ref={titleRef}
           variants={titleContainer}
           initial="hidden"
           animate="visible"
@@ -341,10 +317,16 @@ export default function Hero3() {
             textAlign: "center",
             padding: "clamp(1.3rem, 3.4vh, 2.8rem) 1.5rem 0",
             pointerEvents: "none",
-            willChange: "opacity",
           }}
         >
-          <motion.span variants={fadeUp} style={{ ...labelOnCream, display: "block" }}>
+          <motion.span
+            variants={fadeUp}
+            style={{
+              ...labelOnCream,
+              display: "block",
+              textShadow: "0 1px 10px rgba(246,238,220,0.9)",
+            }}
+          >
             Fresh Fruit Drinks · Los Angeles
           </motion.span>
           <motion.h1
@@ -356,6 +338,8 @@ export default function Hero3() {
               lineHeight: 0.95,
               color: colors.ink,
               margin: "0.4rem 0 0.22rem",
+              textShadow:
+                "0 2px 16px rgba(246,238,220,0.95), 0 0 30px rgba(246,238,220,0.8)",
             }}
           >
             Vida Fresca
@@ -368,6 +352,7 @@ export default function Hero3() {
               fontSize: "clamp(1.2rem, 2.6vw, 2rem)",
               color: "#141414",
               lineHeight: 1,
+              textShadow: "0 1px 12px rgba(246,238,220,0.95)",
             }}
           >
             made fresh. made simple. made for you.
