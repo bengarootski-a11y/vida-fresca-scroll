@@ -20,6 +20,16 @@ type Drink = {
   hold: number; // frame-x to pin the (spinning, drifting) cup at — keeps it centred
   driftPts: [number, number][]; // measured cup-centre (frame-x) vs scroll progress
   baseYPts: [number, number][]; // measured cup-base (frame-y) vs scroll progress
+  // The cups are generated BLANK (no logo) so the clear cup never shows a
+  // doubled label. We composite the one real, crisp VIDA FRESCA sticker on the
+  // front. As the cup turns, the label drifts a touch and foreshortens (width
+  // shrinks); height stays ~constant. Frame px, relative to the pinned cup.
+  sticker: {
+    xPts: [number, number][]; // label offset-x from cup-centre vs progress
+    wPts: [number, number][]; // label width vs progress (foreshortening)
+    height: number; // label height (≈ constant)
+    yOff: number; // label centre above the cup base (negative = up)
+  };
 };
 
 const DRINKS: Drink[] = [
@@ -33,17 +43,23 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 225],
-      [0.25, 237],
-      [0.5, 257],
-      [0.75, 263],
-      [1, 264],
+      [0, 216],
+      [0.25, 222],
+      [0.5, 243],
+      [0.75, 257],
+      [1, 259],
     ],
     baseYPts: [
-      [0, 589],
-      [0.5, 605],
-      [1, 613],
+      [0, 619],
+      [0.5, 621],
+      [1, 623],
     ],
+    sticker: {
+      xPts: [[0, 0], [0.5, 4], [1, 10]],
+      wPts: [[0, 120], [0.5, 112], [1, 104]],
+      height: 116,
+      yOff: -150,
+    },
   },
   {
     key: "mango",
@@ -55,17 +71,23 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 227],
-      [0.25, 235],
-      [0.5, 242],
-      [0.75, 245],
-      [1, 245],
+      [0, 226],
+      [0.25, 233],
+      [0.5, 249],
+      [0.75, 256],
+      [1, 256],
     ],
     baseYPts: [
-      [0, 589],
-      [0.5, 605],
-      [1, 613],
+      [0, 618],
+      [0.5, 621],
+      [1, 623],
     ],
+    sticker: {
+      xPts: [[0, 0], [0.5, 4], [1, 10]],
+      wPts: [[0, 122], [0.5, 114], [1, 106]],
+      height: 118,
+      yOff: -150,
+    },
   },
   {
     key: "pa",
@@ -77,17 +99,23 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 215],
-      [0.25, 221],
-      [0.5, 223],
-      [0.75, 224],
-      [1, 224],
+      [0, 229],
+      [0.25, 234],
+      [0.5, 245],
+      [0.75, 247],
+      [1, 246],
     ],
     baseYPts: [
-      [0, 600],
-      [0.5, 608],
-      [1, 612],
+      [0, 628],
+      [0.5, 625],
+      [1, 623],
     ],
+    sticker: {
+      xPts: [[0, 0], [0.5, 4], [1, 9]],
+      wPts: [[0, 124], [0.5, 116], [1, 108]],
+      height: 118,
+      yOff: -152,
+    },
   },
 ];
 
@@ -110,7 +138,7 @@ const BASELINE = 0.82;
 
 // ?v bust: frame files keep the same names across regenerations, so bump this
 // whenever the frames change to force browsers to fetch the new images.
-const FRAMES_VERSION = 14;
+const FRAMES_VERSION = 15;
 const framePath = (dir: string, i: number) =>
   `${dir}/frame_${String(i + 1).padStart(4, "0")}.jpg?v=${FRAMES_VERSION}`;
 
@@ -127,6 +155,12 @@ export default function Hero3() {
     const imagesByDrink: HTMLImageElement[][] = [];
     const currentIdx: number[] = DRINKS.map(() => -1);
     let rafId = 0;
+
+    // One real, crisp sticker composited onto each blank cup's front.
+    const stickerImg = new Image();
+    stickerImg.src = "/brand/sticker.png";
+    stickerImg.onload = () =>
+      DRINKS.forEach((_, d) => draw(d, currentIdx[d] >= 0 ? currentIdx[d] : 0));
 
     const draw = (d: number, idx: number) => {
       const canvas = canvasRefs.current[d];
@@ -161,6 +195,17 @@ export default function Hero3() {
         dw,
         dh,
       );
+      // The one crisp VIDA FRESCA logo on the blank cup's front. The cup is
+      // pinned (centre at frame-x `hold`, base at ch*BASELINE), so the label
+      // rides a fixed spot, offset by the measured per-drink curves.
+      const st = drink.sticker;
+      if (st && stickerImg.complete && stickerImg.naturalWidth > 0) {
+        const sw = lerpPts(st.wPts, progress) * scale;
+        const sh = st.height * scale;
+        const sx = (cw - dw) / 2 + (hold + lerpPts(st.xPts, progress)) * scale;
+        const sy = ch * BASELINE + st.yOff * scale;
+        ctx.drawImage(stickerImg, sx - sw / 2, sy - sh / 2, sw, sh);
+      }
       currentIdx[d] = idx;
     };
 
