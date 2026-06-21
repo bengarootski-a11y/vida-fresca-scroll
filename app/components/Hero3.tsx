@@ -22,12 +22,15 @@ type Drink = {
   baseYPts: [number, number][]; // measured cup-base (frame-y) vs scroll progress
   // The cups are generated BLANK (no logo) so the clear cup never shows a
   // doubled label. We composite the one real, crisp VIDA FRESCA sticker on the
-  // front. As the cup turns, the label drifts a touch and foreshortens (width
-  // shrinks); height stays ~constant. Frame px, relative to the pinned cup.
+  // front and make it ride the cup's turntable spin: model the cup as a
+  // cylinder of radius `radius` turning by `theta1` over the scroll, so the
+  // label slides across the face (x = radius·sinθ) and foreshortens
+  // (width = w0·cosθ) — it reads as printed on the cup, not pasted on top.
   sticker: {
-    xPts: [number, number][]; // label offset-x from cup-centre vs progress
-    wPts: [number, number][]; // label width vs progress (foreshortening)
-    height: number; // label height (≈ constant)
+    theta1: number; // total turn over the scroll (degrees)
+    radius: number; // cup radius (frame px) — how far the label travels
+    w0: number; // label width face-on (frame px)
+    h: number; // label height (≈ constant; turn is about the vertical axis)
     yOff: number; // label centre above the cup base (negative = up)
   };
 };
@@ -54,12 +57,7 @@ const DRINKS: Drink[] = [
       [0.5, 621],
       [1, 623],
     ],
-    sticker: {
-      xPts: [[0, 0], [0.5, 4], [1, 10]],
-      wPts: [[0, 120], [0.5, 112], [1, 104]],
-      height: 116,
-      yOff: -150,
-    },
+    sticker: { theta1: 32, radius: 92, w0: 158, h: 150, yOff: -150 },
   },
   {
     key: "mango",
@@ -82,12 +80,7 @@ const DRINKS: Drink[] = [
       [0.5, 621],
       [1, 623],
     ],
-    sticker: {
-      xPts: [[0, 0], [0.5, 4], [1, 10]],
-      wPts: [[0, 122], [0.5, 114], [1, 106]],
-      height: 118,
-      yOff: -150,
-    },
+    sticker: { theta1: 32, radius: 92, w0: 160, h: 152, yOff: -150 },
   },
   {
     key: "pa",
@@ -110,12 +103,7 @@ const DRINKS: Drink[] = [
       [0.5, 625],
       [1, 623],
     ],
-    sticker: {
-      xPts: [[0, 0], [0.5, 4], [1, 9]],
-      wPts: [[0, 124], [0.5, 116], [1, 108]],
-      height: 118,
-      yOff: -152,
-    },
+    sticker: { theta1: 30, radius: 90, w0: 160, h: 152, yOff: -152 },
   },
 ];
 
@@ -146,6 +134,8 @@ export default function Hero3() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRefs = useRef<(HTMLCanvasElement | null)[]>([]);
   const hintRef = useRef<HTMLDivElement>(null);
+  const scrimRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -161,6 +151,11 @@ export default function Hero3() {
     stickerImg.src = "/brand/sticker.png";
     stickerImg.onload = () =>
       DRINKS.forEach((_, d) => draw(d, currentIdx[d] >= 0 ? currentIdx[d] : 0));
+    // Offscreen buffer used to embed the sticker into the cup's lighting so it
+    // reads as printed on the cup (picks up the frost highlights + curvature),
+    // not pasted flat on top.
+    const lbuf = document.createElement("canvas");
+    const lctx = lbuf.getContext("2d");
 
     const draw = (d: number, idx: number) => {
       const canvas = canvasRefs.current[d];
@@ -200,16 +195,45 @@ export default function Hero3() {
         dw,
         dh,
       );
-      // The one crisp VIDA FRESCA logo on the blank cup's front. The cup is
-      // pinned (centre at frame-x `hold`, base at ch*BASELINE), so the label
-      // rides a fixed spot, offset by the measured per-drink curves.
+      // The one crisp VIDA FRESCA logo, riding the cup's turntable spin. Model
+      // the cup as a cylinder turning by `theta1` over the scroll: the label
+      // slides across the face (x = radius·sinθ) and foreshortens
+      // (width = w0·cosθ), so it looks printed on the cup, not pasted on.
       const st = drink.sticker;
-      if (st && stickerImg.complete && stickerImg.naturalWidth > 0) {
-        const sw = lerpPts(st.wPts, progress) * scale;
-        const sh = st.height * scale;
-        const sx = (cw - dw) / 2 + (hold + lerpPts(st.xPts, progress)) * scale;
+      if (st && stickerImg.complete && stickerImg.naturalWidth > 0 && lctx) {
+        const theta = ((st.theta1 * Math.PI) / 180) * progress;
+        const sw = st.w0 * Math.cos(theta) * scale;
+        const sh = st.h * scale;
+        const sx =
+          (cw - dw) / 2 + (hold + st.radius * Math.sin(theta)) * scale;
         const sy = ch * BASELINE + st.yOff * scale;
-        ctx.drawImage(stickerImg, sx - sw / 2, sy - sh / 2, sw, sh);
+        const lx = sx - sw / 2;
+        const ly = sy - sh / 2;
+        const ow = Math.max(1, Math.ceil(sw));
+        const oh = Math.max(1, Math.ceil(sh));
+        lbuf.width = ow;
+        lbuf.height = oh;
+        // 1) the crisp sticker
+        lctx.clearRect(0, 0, ow, oh);
+        lctx.drawImage(stickerImg, 0, 0, ow, oh);
+        // 2) blend the cup underneath INTO it (soft-light) so the sticker picks
+        // up the cup's frost highlights, shadows and curvature → looks printed.
+        lctx.globalCompositeOperation = "soft-light";
+        lctx.globalAlpha = 0.85;
+        const fX = (cw - dw) / 2 + (hold - cupCenter) * scale;
+        const fY = ch * BASELINE - cupBottom * scale;
+        lctx.drawImage(img, fX - lx, fY - ly, dw, dh);
+        // a touch of multiply for contact shading at the edges
+        lctx.globalCompositeOperation = "multiply";
+        lctx.globalAlpha = 0.18;
+        lctx.drawImage(img, fX - lx, fY - ly, dw, dh);
+        // 3) clip everything back to the sticker's shape
+        lctx.globalCompositeOperation = "destination-in";
+        lctx.globalAlpha = 1;
+        lctx.drawImage(stickerImg, 0, 0, ow, oh);
+        lctx.globalCompositeOperation = "source-over";
+        // 4) drop the embedded sticker onto the cup
+        ctx.drawImage(lbuf, lx, ly, sw, sh);
       }
       currentIdx[d] = idx;
     };
@@ -258,6 +282,11 @@ export default function Hero3() {
       });
       if (hintRef.current)
         hintRef.current.style.opacity = String(Math.max(0, 1 - progress * 4));
+      // Fade the title + top scrim as the decompose begins so the contents
+      // flying up are never clipped/masked by the header.
+      const headerFade = Math.max(0, Math.min(1, 1 - progress * 3.4));
+      if (scrimRef.current) scrimRef.current.style.opacity = String(headerFade);
+      if (titleRef.current) titleRef.current.style.opacity = String(headerFade);
       rafId = requestAnimationFrame(tick);
     };
     rafId = requestAnimationFrame(tick);
@@ -339,24 +368,28 @@ export default function Hero3() {
           ))}
         </div>
 
-        {/* top scrim keeps the title legible over the drinks */}
+        {/* top scrim keeps the title legible over the full cups; both it and
+            the title fade out as you scroll so the flying contents aren't
+            masked by the header during the decompose. */}
         <div
+          ref={scrimRef}
           aria-hidden
           style={{
             position: "absolute",
             top: 0,
             left: 0,
             right: 0,
-            height: "36vh",
+            height: "30vh",
             zIndex: 2,
             pointerEvents: "none",
             background:
-              "linear-gradient(to bottom, rgba(246,238,220,0.97) 0%, rgba(246,238,220,0.78) 42%, rgba(246,238,220,0) 100%)",
+              "linear-gradient(to bottom, rgba(246,238,220,0.97) 0%, rgba(246,238,220,0.7) 45%, rgba(246,238,220,0) 100%)",
           }}
         />
 
         {/* TITLE */}
         <motion.div
+          ref={titleRef}
           variants={titleContainer}
           initial="hidden"
           animate="visible"
@@ -369,6 +402,7 @@ export default function Hero3() {
             textAlign: "center",
             padding: "clamp(1.3rem, 3.4vh, 2.8rem) 1.5rem 0",
             pointerEvents: "none",
+            willChange: "opacity",
           }}
         >
           <motion.span variants={fadeUp} style={{ ...labelOnCream, display: "block" }}>
