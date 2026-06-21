@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { colors, fonts } from "./tokens";
 
 // Slim closing footer. Continues the deep green of the CTA above so the page
@@ -61,11 +62,13 @@ export default function SiteFooter() {
             gap: "1.4rem",
           }}
         >
-          <a
+          <motion.a
             href="https://instagram.com/vidafrescala"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Follow Vida Fresca on Instagram"
+            whileHover={{ color: colors.pink, x: 2 }}
+            transition={{ type: "spring", stiffness: 400, damping: 18 }}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -94,7 +97,7 @@ export default function SiteFooter() {
               <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
             </svg>
             @vidafrescala
-          </a>
+          </motion.a>
         </nav>
       </div>
 
