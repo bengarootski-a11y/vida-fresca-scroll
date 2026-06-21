@@ -20,19 +20,6 @@ type Drink = {
   hold: number; // frame-x to pin the (spinning, drifting) cup at — keeps it centred
   driftPts: [number, number][]; // measured cup-centre (frame-x) vs scroll progress
   baseYPts: [number, number][]; // measured cup-base (frame-y) vs scroll progress
-  // The cups are generated BLANK (no logo) so the clear cup never shows a
-  // doubled label. We composite the one real, crisp VIDA FRESCA sticker on the
-  // front and make it ride the cup's turntable spin: model the cup as a
-  // cylinder of radius `radius` turning by `theta1` over the scroll, so the
-  // label slides across the face (x = radius·sinθ) and foreshortens
-  // (width = w0·cosθ) — it reads as printed on the cup, not pasted on top.
-  sticker: {
-    theta1: number; // total turn over the scroll (degrees)
-    radius: number; // cup radius (frame px) — how far the label travels
-    w0: number; // label width face-on (frame px)
-    h: number; // label height (≈ constant; turn is about the vertical axis)
-    yOff: number; // label centre above the cup base (negative = up)
-  };
 };
 
 const DRINKS: Drink[] = [
@@ -47,17 +34,16 @@ const DRINKS: Drink[] = [
     hold: 245,
     driftPts: [
       [0, 216],
-      [0.25, 222],
-      [0.5, 243],
-      [0.75, 257],
-      [1, 259],
+      [0.25, 221],
+      [0.5, 240],
+      [0.75, 256],
+      [1, 261],
     ],
     baseYPts: [
-      [0, 619],
-      [0.5, 621],
-      [1, 623],
+      [0, 616],
+      [0.5, 619],
+      [1, 621],
     ],
-    sticker: { theta1: 32, radius: 92, w0: 158, h: 150, yOff: -150 },
   },
   {
     key: "mango",
@@ -69,18 +55,17 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 226],
-      [0.25, 233],
-      [0.5, 249],
-      [0.75, 256],
-      [1, 256],
+      [0, 231],
+      [0.25, 235],
+      [0.5, 241],
+      [0.75, 245],
+      [1, 247],
     ],
     baseYPts: [
-      [0, 618],
-      [0.5, 621],
-      [1, 623],
+      [0, 616],
+      [0.5, 619],
+      [1, 621],
     ],
-    sticker: { theta1: 32, radius: 92, w0: 160, h: 152, yOff: -150 },
   },
   {
     key: "pa",
@@ -92,18 +77,17 @@ const DRINKS: Drink[] = [
     zoom: 1.2,
     hold: 245,
     driftPts: [
-      [0, 229],
-      [0.25, 234],
-      [0.5, 245],
-      [0.75, 247],
-      [1, 246],
+      [0, 235],
+      [0.25, 242],
+      [0.5, 242],
+      [0.75, 237],
+      [1, 235],
     ],
     baseYPts: [
-      [0, 628],
-      [0.5, 625],
-      [1, 623],
+      [0, 618],
+      [0.5, 620],
+      [1, 621],
     ],
-    sticker: { theta1: 30, radius: 90, w0: 160, h: 152, yOff: -152 },
   },
 ];
 
@@ -126,7 +110,7 @@ const BASELINE = 0.82;
 
 // ?v bust: frame files keep the same names across regenerations, so bump this
 // whenever the frames change to force browsers to fetch the new images.
-const FRAMES_VERSION = 15;
+const FRAMES_VERSION = 16;
 const framePath = (dir: string, i: number) =>
   `${dir}/frame_${String(i + 1).padStart(4, "0")}.jpg?v=${FRAMES_VERSION}`;
 
@@ -146,17 +130,6 @@ export default function Hero3() {
     const currentIdx: number[] = DRINKS.map(() => -1);
     let rafId = 0;
 
-    // One real, crisp sticker composited onto each blank cup's front.
-    const stickerImg = new Image();
-    stickerImg.src = "/brand/sticker.png";
-    stickerImg.onload = () =>
-      DRINKS.forEach((_, d) => draw(d, currentIdx[d] >= 0 ? currentIdx[d] : 0));
-    // Offscreen buffer used to embed the sticker into the cup's lighting so it
-    // reads as printed on the cup (picks up the frost highlights + curvature),
-    // not pasted flat on top.
-    const lbuf = document.createElement("canvas");
-    const lctx = lbuf.getContext("2d");
-
     const draw = (d: number, idx: number) => {
       const canvas = canvasRefs.current[d];
       const ctx = ctxs[d];
@@ -171,18 +144,13 @@ export default function Hero3() {
       const ih = img.naturalHeight;
       // contain-fit (× per-drink zoom): whole drink visible, cream margins
       // blend with the stage; zoom evens out the three drinks' apparent size.
-      // On phones/portrait each column is narrow and tall, so the contain-fit
-      // cup is small and leaves a big vertical gap — scale it up (more so the
-      // more portrait the viewport is). Contents fly UP, so a little horizontal
-      // overflow is fine. Desktop (landscape, wide columns) is unchanged.
-      const portrait = ch > cw * 1.6;
-      const zoomBoost = portrait
-        ? cw < 200
-          ? 1.62
-          : 1.32
-        : cw < 260
-          ? 1.18
-          : 1;
+      // On a PORTRAIT viewport (phones/tablets) each column is narrow and tall,
+      // so the contain-fit cup is small and leaves a big vertical gap — scale it
+      // up (phones most, tablets less). Contents fly UP so a little horizontal
+      // overflow is fine. Landscape/desktop is unchanged.
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      const zoomBoost = vh > vw * 1.1 ? (vw < 520 ? 1.5 : 1.28) : 1;
       const scale =
         Math.min(cw / iw, ch / ih) * (DRINKS[d]?.zoom ?? 1) * zoomBoost;
       const dw = iw * scale;
@@ -196,6 +164,9 @@ export default function Hero3() {
       const cupCenter = lerpPts(drink.driftPts, progress);
       const hold = drink?.hold ?? cupCenter;
       const cupBottom = lerpPts(drink.baseYPts, progress);
+      // The VIDA FRESCA logo is now baked into the video (one bold label per
+      // cup, on the opaque frosted surface, turning in 3D with the cup), so no
+      // sticker is composited here — just draw the frame.
       ctx.drawImage(
         img,
         (cw - dw) / 2 + (hold - cupCenter) * scale,
@@ -203,46 +174,6 @@ export default function Hero3() {
         dw,
         dh,
       );
-      // The one crisp VIDA FRESCA logo, riding the cup's turntable spin. Model
-      // the cup as a cylinder turning by `theta1` over the scroll: the label
-      // slides across the face (x = radius·sinθ) and foreshortens
-      // (width = w0·cosθ), so it looks printed on the cup, not pasted on.
-      const st = drink.sticker;
-      if (st && stickerImg.complete && stickerImg.naturalWidth > 0 && lctx) {
-        const theta = ((st.theta1 * Math.PI) / 180) * progress;
-        const sw = st.w0 * Math.cos(theta) * scale;
-        const sh = st.h * scale;
-        const sx =
-          (cw - dw) / 2 + (hold + st.radius * Math.sin(theta)) * scale;
-        const sy = ch * BASELINE + st.yOff * scale;
-        const lx = sx - sw / 2;
-        const ly = sy - sh / 2;
-        const ow = Math.max(1, Math.ceil(sw));
-        const oh = Math.max(1, Math.ceil(sh));
-        lbuf.width = ow;
-        lbuf.height = oh;
-        // 1) the crisp sticker
-        lctx.clearRect(0, 0, ow, oh);
-        lctx.drawImage(stickerImg, 0, 0, ow, oh);
-        // 2) blend the cup underneath INTO it (soft-light) so the sticker picks
-        // up the cup's frost highlights, shadows and curvature → looks printed.
-        lctx.globalCompositeOperation = "soft-light";
-        lctx.globalAlpha = 0.85;
-        const fX = (cw - dw) / 2 + (hold - cupCenter) * scale;
-        const fY = ch * BASELINE - cupBottom * scale;
-        lctx.drawImage(img, fX - lx, fY - ly, dw, dh);
-        // a touch of multiply for contact shading at the edges
-        lctx.globalCompositeOperation = "multiply";
-        lctx.globalAlpha = 0.18;
-        lctx.drawImage(img, fX - lx, fY - ly, dw, dh);
-        // 3) clip everything back to the sticker's shape
-        lctx.globalCompositeOperation = "destination-in";
-        lctx.globalAlpha = 1;
-        lctx.drawImage(stickerImg, 0, 0, ow, oh);
-        lctx.globalCompositeOperation = "source-over";
-        // 4) drop the embedded sticker onto the cup
-        ctx.drawImage(lbuf, lx, ly, sw, sh);
-      }
       currentIdx[d] = idx;
     };
 
