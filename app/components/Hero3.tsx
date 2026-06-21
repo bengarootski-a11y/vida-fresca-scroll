@@ -176,7 +176,12 @@ export default function Hero3() {
       const ih = img.naturalHeight;
       // contain-fit (× per-drink zoom): whole drink visible, cream margins
       // blend with the stage; zoom evens out the three drinks' apparent size.
-      const scale = Math.min(cw / iw, ch / ih) * (DRINKS[d]?.zoom ?? 1);
+      // On phones each column is narrow, so scale the cups up a notch (the
+      // contents fly UP, so a little horizontal overflow is fine) — keeps the
+      // hero from reading as three tiny cups on mobile.
+      const zoomBoost = cw < 170 ? 1.42 : cw < 260 ? 1.18 : 1;
+      const scale =
+        Math.min(cw / iw, ch / ih) * (DRINKS[d]?.zoom ?? 1) * zoomBoost;
       const dw = iw * scale;
       const dh = ih * scale;
       // Pin the spinning cup to a fixed frame-x (`hold`) every frame: the cup
