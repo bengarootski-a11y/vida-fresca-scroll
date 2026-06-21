@@ -137,7 +137,7 @@ export default function FeaturesSection() {
             margin: "1rem 0 2.8rem",
           }}
         >
-          Organic. Fresh. Simple.
+          Real fruit, no shortcuts.
         </motion.h2>
 
         <motion.div className="vf-grid-3" variants={revealContainer}>

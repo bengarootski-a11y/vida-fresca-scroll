@@ -84,7 +84,7 @@ export default function IngredientsSection() {
             ]}
             ariaLabel="Organic, down to the ice."
             fontFamily={fonts.display}
-            cursorColor={colors.pink}
+            showCursor={false}
             style={{
               fontSize: "clamp(2rem, 4vw, 3.5rem)",
               color: colors.ink,

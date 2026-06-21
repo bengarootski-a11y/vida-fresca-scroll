@@ -40,6 +40,7 @@ export const TypewriterEffect = ({
   cursorColor = "#F92C6E",
   fontFamily = "var(--font-knewave)",
   ariaLabel,
+  showCursor = true,
   style,
 }: {
   words: Word[];
@@ -47,6 +48,7 @@ export const TypewriterEffect = ({
   cursorColor?: string;
   fontFamily?: string;
   ariaLabel?: string;
+  showCursor?: boolean;
   style?: React.CSSProperties;
 }) => {
   const wordsArray = words.map((word) => ({
@@ -103,21 +105,23 @@ export const TypewriterEffect = ({
           </span>
         ))}
       </motion.span>
-      <motion.span
-        aria-hidden
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
-        style={{
-          display: "inline-block",
-          width: "0.5ch",
-          height: "0.95em",
-          marginLeft: "0.08em",
-          borderRadius: 3,
-          transform: "translateY(0.08em)",
-          background: cursorColor,
-        }}
-      />
+      {showCursor && (
+        <motion.span
+          aria-hidden
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+          style={{
+            display: "inline-block",
+            width: "0.5ch",
+            height: "0.95em",
+            marginLeft: "0.08em",
+            borderRadius: 3,
+            transform: "translateY(0.08em)",
+            background: cursorColor,
+          }}
+        />
+      )}
     </div>
   );
 };
