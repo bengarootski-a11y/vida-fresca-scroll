@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { colors, fonts, labelOnCream } from "./tokens";
 import { flipContainer, flipItem, revealItem, revealContainer, revealViewport } from "./motion";
+import { TypewriterEffect } from "@/components/ui/typewriter-effect";
 
 // Real, organic ingredient lists — matches the hero order (Watermelon left,
 // Mango middle, Pineapple right).
@@ -63,19 +64,34 @@ export default function IngredientsSection() {
         <motion.p variants={revealItem} style={{ ...labelOnCream, display: "block" }}>
           What&apos;s Inside
         </motion.p>
-        <motion.h2
+        <motion.div
           variants={revealItem}
+          role="heading"
+          aria-level={2}
           style={{
-            fontFamily: fonts.display,
-            fontWeight: 400,
-            fontSize: "clamp(2rem, 4vw, 3.5rem)",
-            lineHeight: 1.05,
-            color: colors.ink,
             margin: "1rem 0 0.7rem",
+            display: "flex",
+            justifyContent: "center",
           }}
         >
-          Organic, down to the ice.
-        </motion.h2>
+          <TypewriterEffect
+            words={[
+              { text: "Organic," },
+              { text: "down" },
+              { text: "to" },
+              { text: "the" },
+              { text: "ice.", color: colors.pinkInk },
+            ]}
+            ariaLabel="Organic, down to the ice."
+            fontFamily={fonts.display}
+            cursorColor={colors.pink}
+            style={{
+              fontSize: "clamp(2rem, 4vw, 3.5rem)",
+              color: colors.ink,
+              justifyContent: "center",
+            }}
+          />
+        </motion.div>
         <motion.p
           variants={revealItem}
           style={{
