@@ -171,10 +171,18 @@ export default function Hero3() {
       const ih = img.naturalHeight;
       // contain-fit (× per-drink zoom): whole drink visible, cream margins
       // blend with the stage; zoom evens out the three drinks' apparent size.
-      // On phones each column is narrow, so scale the cups up a notch (the
-      // contents fly UP, so a little horizontal overflow is fine) — keeps the
-      // hero from reading as three tiny cups on mobile.
-      const zoomBoost = cw < 170 ? 1.42 : cw < 260 ? 1.18 : 1;
+      // On phones/portrait each column is narrow and tall, so the contain-fit
+      // cup is small and leaves a big vertical gap — scale it up (more so the
+      // more portrait the viewport is). Contents fly UP, so a little horizontal
+      // overflow is fine. Desktop (landscape, wide columns) is unchanged.
+      const portrait = ch > cw * 1.6;
+      const zoomBoost = portrait
+        ? cw < 200
+          ? 1.62
+          : 1.32
+        : cw < 260
+          ? 1.18
+          : 1;
       const scale =
         Math.min(cw / iw, ch / ih) * (DRINKS[d]?.zoom ?? 1) * zoomBoost;
       const dw = iw * scale;
