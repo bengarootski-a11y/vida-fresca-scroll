@@ -8,9 +8,17 @@ import { EASE } from "./motion";
 // Phone hero. The desktop hero is a 420vh pinned, scroll-scrubbed canvas
 // (three drinks decomposing through 363 frames) — that interaction doesn't read
 // well on touch and is heavy to load, so on mobile we drop it entirely and show
-// the three drinks as clean static product shots that flow in the normal
-// document, letting the rest of the page move up. Still scroll-driven: the cups
-// gently parallax and reveal as they enter the viewport.
+// the three drinks as clean static product shots in the normal document flow.
+//
+// The frames already sit on the same cream as the page (their background is
+// ~#F5EFDD, the page is #F6EEDC), so the cups blend straight into the surface —
+// no cutout or shadow needed. (The old rectangular drop-shadow was what read as
+// a "white box" behind each cup, since the images are opaque and have no alpha.)
+//
+// Cups and labels live in two separate grid rows: the cup row is bottom-aligned
+// so the three cup bases line up, and the labels sit in their own row beneath —
+// so a two-line name (Pineapple Paradise) can no longer push its cup out of
+// line with the others. One gentle parallax drives the whole trio together.
 const DRINKS = [
   {
     key: "wm",
@@ -35,67 +43,27 @@ const DRINKS = [
   },
 ];
 
-function MobileCup({ drink, index }: { drink: (typeof DRINKS)[number]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-  // Each cup drifts up at a slightly different rate as the hero scrolls past —
-  // a subtle depth cue that replaces the desktop turntable.
-  const drift = 26 + index * 10;
-  const y = useTransform(scrollYProgress, [0, 1], [drift, -drift]);
+const cupVariants = {
+  hidden: { opacity: 0, y: 26, filter: "blur(8px)" },
+  visible: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: EASE } },
+};
 
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.7, delay: 0.45 + index * 0.12, ease: EASE }}
-      style={{ textAlign: "center" }}
-    >
-      <motion.div style={{ y: reduce ? 0 : y }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={drink.img}
-          alt={`${drink.name} — ${drink.note}`}
-          loading="eager"
-          style={{
-            display: "block",
-            width: "100%",
-            height: "auto",
-            margin: "0 auto",
-            filter: "drop-shadow(0 14px 22px rgba(26,77,46,0.18))",
-          }}
-        />
-      </motion.div>
-      <div
-        aria-hidden
-        style={{
-          width: 30,
-          height: 3,
-          borderRadius: 2,
-          background: drink.accent,
-          margin: "0.7rem auto 0.5rem",
-        }}
-      />
-      <h2
-        style={{
-          fontFamily: fonts.display,
-          fontWeight: 400,
-          fontSize: "clamp(0.85rem, 3.4vw, 1.15rem)",
-          lineHeight: 1.05,
-          color: colors.ink,
-        }}
-      >
-        {drink.name}
-      </h2>
-    </motion.div>
-  );
-}
+const labelVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: EASE } },
+};
 
 export default function HeroMobile() {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  // A single, uniform parallax for the whole trio: the cups always stay in line
+  // with one another and just drift together as the hero scrolls past.
+  const { scrollYProgress } = useScroll({
+    target: rowRef,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [26, -26]);
+
   return (
     <section
       id="top"
@@ -105,7 +73,7 @@ export default function HeroMobile() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "clamp(3.5rem, 12vh, 6rem) 1.25rem 2.5rem",
+        padding: "clamp(3rem, 10vh, 5rem) 1.25rem 2.5rem",
       }}
     >
       <motion.div
@@ -115,7 +83,7 @@ export default function HeroMobile() {
           hidden: {},
           visible: { transition: { delayChildren: 0.35, staggerChildren: 0.12 } },
         }}
-        style={{ textAlign: "center", marginBottom: "clamp(1.8rem, 5vh, 3rem)" }}
+        style={{ textAlign: "center", marginBottom: "clamp(1.6rem, 4.5vh, 2.6rem)" }}
       >
         <motion.span
           variants={{
@@ -164,21 +132,71 @@ export default function HeroMobile() {
         </motion.p>
       </motion.div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "0.6rem",
-          alignItems: "end",
-          maxWidth: 520,
-          width: "100%",
-          margin: "0 auto",
-        }}
-      >
-        {DRINKS.map((drink, i) => (
-          <MobileCup key={drink.key} drink={drink} index={i} />
-        ))}
-      </div>
+      <motion.div ref={rowRef} style={{ y: reduce ? 0 : y, width: "100%" }}>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: { transition: { delayChildren: 0.45, staggerChildren: 0.1 } },
+          }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            columnGap: "0.5rem",
+            rowGap: "0.65rem",
+            alignItems: "end",
+            maxWidth: 460,
+            width: "100%",
+            margin: "0 auto",
+          }}
+        >
+          {/* Row 1 — the cups (bottom-aligned so the bases line up) */}
+          {DRINKS.map((drink) => (
+            <motion.div key={`cup-${drink.key}`} variants={cupVariants} style={{ alignSelf: "end", lineHeight: 0 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={drink.img}
+                alt={`${drink.name} — ${drink.note}`}
+                loading="eager"
+                style={{ display: "block", width: "100%", height: "auto" }}
+              />
+            </motion.div>
+          ))}
+
+          {/* Row 2 — the labels (hang from a shared baseline; a two-line name
+              just extends downward without moving its cup) */}
+          {DRINKS.map((drink) => (
+            <motion.div
+              key={`label-${drink.key}`}
+              variants={labelVariants}
+              style={{ alignSelf: "start", textAlign: "center" }}
+            >
+              <div
+                aria-hidden
+                style={{
+                  width: 28,
+                  height: 3,
+                  borderRadius: 2,
+                  background: drink.accent,
+                  margin: "0 auto 0.45rem",
+                }}
+              />
+              <h2
+                style={{
+                  fontFamily: fonts.display,
+                  fontWeight: 400,
+                  fontSize: "clamp(0.8rem, 3.2vw, 1.05rem)",
+                  lineHeight: 1.08,
+                  color: colors.ink,
+                }}
+              >
+                {drink.name}
+              </h2>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}

@@ -1,7 +1,6 @@
 import Providers from "./components/Providers";
 import SmoothScroll from "./components/SmoothScroll";
 import ScrollProgress from "./components/ScrollProgress";
-import CustomCursor from "./components/CustomCursor";
 import AmbientField from "./components/AmbientField";
 import WaypointNav from "./components/WaypointNav";
 import HeroSwitch from "./components/HeroSwitch";
@@ -21,7 +20,6 @@ export default function Home() {
       </a>
       <SmoothScroll />
       <ScrollProgress />
-      <CustomCursor />
       <AmbientField />
       <WaypointNav />
       <main

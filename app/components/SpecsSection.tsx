@@ -42,7 +42,7 @@ export default function SpecsSection() {
             margin: "1rem 0 2.6rem",
           }}
         >
-          Built for real days.
+          Real fruit. Nothing fake.
         </motion.h2>
 
         <motion.div variants={revealContainer} className="vf-stats">
