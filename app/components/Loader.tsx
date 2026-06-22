@@ -95,9 +95,11 @@ export default function Loader() {
               fontWeight: 700,
               fontSize: "clamp(1.1rem, 2.4vw, 1.7rem)",
               color: colors.pink,
+              padding: "0 1.5rem",
+              textAlign: "center",
             }}
           >
-            made fresh.
+            made fresh. made simple. made for you.
           </motion.div>
 
           {/* progress: a thin pink bar + counter, brand-accent only */}
