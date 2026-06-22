@@ -10,10 +10,11 @@ import { EASE } from "./motion";
 // well on touch and is heavy to load, so on mobile we drop it entirely and show
 // the three drinks as clean static product shots in the normal document flow.
 //
-// The frames already sit on the same cream as the page (their background is
-// ~#F5EFDD, the page is #F6EEDC), so the cups blend straight into the surface —
-// no cutout or shadow needed. (The old rectangular drop-shadow was what read as
-// a "white box" behind each cup, since the images are opaque and have no alpha.)
+// The cup images are tightly-trimmed front-facing frames (logo dead-centre) so
+// the VIDA FRESCA mark reads crisp and the cups fill their columns at phone
+// size. Their cream background matches the page, so the cups blend straight in —
+// no shadow (an opaque image only ever gets a rectangular "white box" shadow,
+// never a cup-shaped one).
 //
 // Cups and labels live in two separate grid rows: the cup row is bottom-aligned
 // so the three cup bases line up, and the labels sit in their own row beneath —
@@ -22,21 +23,21 @@ import { EASE } from "./motion";
 const DRINKS = [
   {
     key: "wm",
-    img: "/frames/frame_0001.webp",
+    img: "/cup-wm",
     name: "Watermelon Blast",
     note: "Crisp, juicy, summer-red.",
     accent: colors.watermelon,
   },
   {
     key: "mango",
-    img: "/frames-mango/frame_0001.webp",
+    img: "/cup-mango",
     name: "Mango Madness",
     note: "Lush, sweet, golden.",
     accent: colors.mango,
   },
   {
     key: "pa",
-    img: "/frames-pineapple/frame_0001.webp",
+    img: "/cup-pa",
     name: "Pineapple Paradise",
     note: "Bright, tangy, tropical.",
     accent: colors.pineapple,
@@ -156,7 +157,15 @@ export default function HeroMobile() {
             <motion.div key={`cup-${drink.key}`} variants={cupVariants} style={{ alignSelf: "end", lineHeight: 0 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={drink.img}
+                src={`${drink.img}.webp`}
+                onError={(e) => {
+                  // WebP → JPEG fallback (site convention), guarded against a loop.
+                  const t = e.currentTarget;
+                  if (!t.dataset.fb) {
+                    t.dataset.fb = "1";
+                    t.src = `${drink.img}.jpg`;
+                  }
+                }}
                 alt={`${drink.name} — ${drink.note}`}
                 loading="eager"
                 style={{ display: "block", width: "100%", height: "auto" }}
