@@ -157,13 +157,13 @@ export default function HeroMobile() {
             <motion.div key={`cup-${drink.key}`} variants={cupVariants} style={{ alignSelf: "end", lineHeight: 0 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`${drink.img}.webp`}
+                src={`${drink.img}.webp?v=2`}
                 onError={(e) => {
                   // WebP → JPEG fallback (site convention), guarded against a loop.
                   const t = e.currentTarget;
                   if (!t.dataset.fb) {
                     t.dataset.fb = "1";
-                    t.src = `${drink.img}.jpg`;
+                    t.src = `${drink.img}.jpg?v=2`;
                   }
                 }}
                 alt={`${drink.name} — ${drink.note}`}
