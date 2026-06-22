@@ -111,8 +111,11 @@ const BASELINE = 0.82;
 // ?v bust: frame files keep the same names across regenerations, so bump this
 // whenever the frames change to force browsers to fetch the new images.
 const FRAMES_VERSION = 20;
-const framePath = (dir: string, i: number) =>
-  `${dir}/frame_${String(i + 1).padStart(4, "0")}.jpg?v=${FRAMES_VERSION}`;
+// Frames are served as WebP (≈75% smaller than the JPEGs → much faster hero
+// load), with the JPEG kept as a graceful fallback for any browser that can't
+// decode WebP.
+const framePath = (dir: string, i: number, ext: "webp" | "jpg" = "webp") =>
+  `${dir}/frame_${String(i + 1).padStart(4, "0")}.${ext}?v=${FRAMES_VERSION}`;
 
 export default function Hero3() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -194,7 +197,12 @@ export default function Hero3() {
       let firstDrawn = false;
       for (let i = 0; i < drink.count; i++) {
         const img = new Image();
-        img.src = framePath(drink.dir, i);
+        // WebP first; fall back to the JPEG once if WebP can't be decoded.
+        img.onerror = () => {
+          img.onerror = null;
+          img.src = framePath(drink.dir, i, "jpg");
+        };
+        img.src = framePath(drink.dir, i, "webp");
         arr[i] = img;
         if (i === 0)
           img.onload = () => {
