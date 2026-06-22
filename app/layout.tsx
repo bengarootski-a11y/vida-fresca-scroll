@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Knewave, Plus_Jakarta_Sans, Caveat } from "next/font/google";
 import "./globals.css";
+import Loader from "./components/Loader";
 
 const knewave = Knewave({
   weight: "400",
@@ -70,7 +71,10 @@ export default function RootLayout({
       lang="en"
       className={`${knewave.variable} ${jakarta.variable} ${caveat.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <Loader />
+        {children}
+      </body>
     </html>
   );
 }
