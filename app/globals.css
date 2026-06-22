@@ -39,6 +39,49 @@ html { scroll-behavior: smooth; }
 }
 .vf-skip-link:focus-visible { transform: translateY(0); }
 
+/* Custom cursor (precise-pointer devices only; mounted by CustomCursor.tsx).
+   A solid pink dot pinned to the pointer + a hollow ring that eases behind it
+   and blooms over interactive elements. */
+.vf-cursor-dot,
+.vf-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100001;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+}
+.vf-cursor-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f92c6e;
+}
+.vf-cursor-ring {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(249, 44, 110, 0.55);
+  transition: width 0.25s ease, height 0.25s ease, background-color 0.25s ease,
+    border-color 0.25s ease;
+}
+.vf-cursor-ring.is-hover {
+  width: 54px;
+  height: 54px;
+  background: rgba(249, 44, 110, 0.12);
+  border-color: rgba(249, 44, 110, 0.9);
+}
+.vf-cursor-ring.is-down {
+  width: 26px;
+  height: 26px;
+}
+/* Hide the native cursor only while ours is active. */
+body.vf-cursor-on,
+body.vf-cursor-on * {
+  cursor: none !important;
+}
+
 /* Lenis smooth scroll */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -126,6 +169,8 @@ html.lenis, html.lenis body { height: auto; }
   .vf-about { grid-template-columns: 1fr; }
   .vf-flavor { grid-template-columns: 1fr; }
   .vf-flavor:nth-of-type(even) .vf-flavor-text { order: 0; }
+  /* The skip link is desktop-only — hidden on phones per design. */
+  .vf-skip-link { display: none !important; }
 }
 
 /* Reduced motion: kill CSS transitions/animations and smooth-scroll.

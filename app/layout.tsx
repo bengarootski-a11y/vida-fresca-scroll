@@ -25,6 +25,12 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
+  // Used to resolve the file-based icon / opengraph-image / twitter-image paths
+  // to absolute URLs for crawlers. Override with NEXT_PUBLIC_SITE_URL when the
+  // final domain is known.
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://vidafrescala.com",
+  ),
   title: "Vida Fresca — Organic Fresh Fruit Drinks · Los Angeles",
   description:
     "Organic agua frescas made fresh — Watermelon Blast, Mango Madness, and Pineapple Paradise. First pop-up July 11 in Larchmont Village, LA.",
